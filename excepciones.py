@@ -1,4 +1,5 @@
 # excepciones.py
+from tkinter import messagebox
 
 class ErrorAplicacion(Exception):
     def __init__(self, nombre_campo=None):
@@ -51,3 +52,79 @@ class NoExisteObjeto(ErroresEntry):
 class NoFormatoFecha(ErroresTipo):
     def __str__(self):
         return f"{super().__str__()} NoFormatoFecha: El formato de fecha no es válido en el campo '{self.nombre_campo}'. Utilice DD-MM-AAAA."
+
+def validar_num(entry_text, nombre_campo):
+    try:
+        entry_text = entry_text.strip()
+        if not entry_text:
+            raise CampoVacio(nombre_campo)
+
+        if ' ' in entry_text:
+            raise SinEspacios(nombre_campo)
+
+        if '.' in entry_text:
+            raise NoUsarDecimales(nombre_campo)
+
+        if any(c in "!@#$%^&*()_+=-{}[]|\:;<>,?/'\"" for c in entry_text):
+            raise NoUsarSimbolos(nombre_campo)
+
+        numero = int(entry_text)
+
+        if numero < 0:
+            raise NoUsarNegativos(nombre_campo)
+
+        return True
+    except ValueError:
+        messagebox.showerror("Error", f"Manejo de errores de la Aplicación:\nEl dato en el campo '{nombre_campo}' debe ser un número.")
+        return False
+    except ErrorAplicacion as e:
+        messagebox.showerror("Error", str(e))
+        return False
+
+def validar_string(entry_text, nombre_campo):
+    try:
+        entry_text = entry_text.strip()
+        if not entry_text:
+            raise CampoVacio(nombre_campo)
+
+        if ' ' in entry_text:
+            raise SinEspacios(nombre_campo)
+
+        if not entry_text.isalpha():
+            raise SoloLetras(nombre_campo)
+
+        return True
+    except ErrorAplicacion as e:
+        messagebox.showerror("Error", str(e))
+        return False
+
+def validar_nombre(entry_text, nombre_campo):
+    try:
+        entry_text = entry_text.strip()
+        if not entry_text:
+            raise CampoVacio(nombre_campo)
+
+        if not entry_text.isalpha():
+            raise SoloLetras(nombre_campo)
+        
+        if any(c in "!@#$%^&*()_+=-{}[]|\:;<>,?/'\"" for c in entry_text):
+            raise NoUsarSimbolos(nombre_campo)
+
+        return True
+    except ErrorAplicacion as e:
+        messagebox.showerror("Error", str(e))
+        return False
+
+def validar_producto(entry_text, nombre_campo):
+    try:
+        entry_text = entry_text.strip()
+        if not entry_text:
+            raise CampoVacio(nombre_campo)
+        
+        if any(c in "!@#$%^&*()_+=-{}[]|\:;<>,?/'\"" for c in entry_text):
+            raise NoUsarSimbolos(nombre_campo)
+
+        return True
+    except ErrorAplicacion as e:
+        messagebox.showerror("Error", str(e))
+        return False
