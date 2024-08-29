@@ -180,4 +180,9 @@ class AdministradorApp:
 if __name__ == "__main__":
     root = tk.Tk()
     app = AdministradorApp(root)
+    root.geometry("1000x400")
+   # root.resizable(False,False)
+    frame1=tk.Frame(root)
+    frame1.pack()
+    frame1.configure(width=200,height=400,bg="red",bd=5)
     root.mainloop()
