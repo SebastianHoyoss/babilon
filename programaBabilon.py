@@ -69,7 +69,7 @@ class Babilon:
 class ProductoWindow(tk.Toplevel):
     def __init__(self, master=None):
         super().__init__(master)
-        self.title("Crear Producto")
+        self.title("Añadir Producto")
         self.geometry("250x200")
         self.configure(bg="azure")
         self.resizable(False,False)
@@ -100,7 +100,7 @@ class ProductoWindow(tk.Toplevel):
         self.combo_tipo.grid(row=3, column=1, padx=10, pady=5, sticky="w")
 
         # Botón para crear el producto
-        boton_crear = tk.Button(contenedor, text="Crear Producto", command=self.crear_producto)
+        boton_crear = tk.Button(contenedor, text="Añadir Producto", command=self.crear_producto)
         boton_crear.grid(row=4, columnspan=2, pady=10)
 
     def crear_producto(self):
@@ -243,82 +243,182 @@ class EliminarProductoWindow(tk.Toplevel):
         messagebox.showinfo("Éxito", f"Producto '{nombre}' eliminado correctamente.")
         self.actualizar_lista()
 
-def abrir_func1():
-    func1Top=Toplevel(root)
-    func1Top.title("Añadir Cliente")
-    func1Top.geometry("500x500")
-    func1Top.configure(bg="azure")
+class ClienteWindow(tk.Toplevel):
+    def __init__(self, master=None):
+        super().__init__(master)
+        self.title("Añadir Cliente")
+        self.geometry("250x200")
+        self.configure(bg="azure")
+        self.resizable(False,False)
+        # Crear el Frame que se centrará en la ventana
+        contenedor = tk.Frame(self)
+        contenedor.pack(expand=True, fill='both')
 
-def abrir_func2():
-    func2Top=Toplevel(root)
-    func2Top.title("Eliminar Cliente")
-    func2Top.geometry("500x500")
-    func2Top.configure(bg="azure")
+        # Campo para el nombre
+        tk.Label(contenedor, text="Nombre").grid(row=0, column=0, padx=10, pady=5, sticky="e")
+        self.entry_nombre = tk.Entry(contenedor, width=20)
+        self.entry_nombre.grid(row=0, column=1, padx=10, pady=5, sticky="w")
 
-def abrir_func3():
-    func3Top=Toplevel(root)
-    master=None
-    func3Top.title("Añadir Producto")
-    func3Top.geometry("250x200")
-    contenedor = tk.Frame(func3Top)
-    contenedor.pack(expand=True, fill='both')
-    contenedor.configure(bg="azure")
-    tk.Label(contenedor, text="Nombre").grid(row=0, column=0, padx=10, pady=5, sticky="e")
-    entry_nombre = tk.Entry(contenedor, width=20)
-    entry_nombre.grid(row=0, column=1, padx=10, pady=5, sticky="w")
+        # Campo para la talla
+        tk.Label(contenedor, text="Dirección").grid(row=1, column=0, padx=10, pady=5, sticky="e")
+        self.entry_direccion = tk.Entry(contenedor, width=20)
+        self.entry_direccion.grid(row=1, column=1, padx=10, pady=5, sticky="w")
 
-    # Campo para la talla
-    tk.Label(contenedor, text="Talla").grid(row=1, column=0, padx=10, pady=5, sticky="e")
-    entry_talla = tk.Entry(contenedor, width=20)
-    entry_talla.grid(row=1, column=1, padx=10, pady=5, sticky="w")
+        # Campo para el precio
+        tk.Label(contenedor, text="Teléfono").grid(row=2, column=0, padx=10, pady=5, sticky="e")
+        self.entry_telefono = tk.Entry(contenedor, width=20)
+        self.entry_telefono.grid(row=2, column=1, padx=10, pady=5, sticky="w")
 
-    # Campo para el precio
-    tk.Label(contenedor, text="Precio").grid(row=2, column=0, padx=10, pady=5, sticky="e")
-    entry_precio = tk.Entry(contenedor, width=20)
-    entry_precio.grid(row=2, column=1, padx=10, pady=5, sticky="w")
+        # Botón para crear el producto
+        boton_crear = tk.Button(contenedor, text="Añadir Cliente", command=self.crear_cliente)
+        boton_crear.grid(row=4, columnspan=2, pady=10)
 
-    # Menú desplegable para el tipo de producto
-    tk.Label(contenedor, text="Tipo").grid(row=3, column=0, padx=10, pady=5, sticky="e")
-    tipo_var = tk.StringVar()
-    combo_tipo = ttk.Combobox(contenedor, width=17, textvariable=tipo_var)
-    combo_tipo['values'] = [tipo.value for tipo in Tipo]
-    combo_tipo.grid(row=3, column=1, padx=10, pady=5, sticky="w")
+    def crear_cliente(self):
+        nombre = self.entry_nombre.get()
+        direccion = self.entry_direccion.get()
+        telefono = self.entry_telefono.get()
 
-    # Botón para crear el producto
-    boton=tk.Button(contenedor,text="Crear Producto").grid(row=4,column=1,pady=10)
-    boton_crear = tk.Button(contenedor, text="Crear Producto", command=crear_producto)
-    boton_crear.grid(row=4, columnspan=2, pady=10)
-
-    def crear_producto(func3Top):
-        nombre = entry_nombre.get()
-        talla = entry_talla.get()
-        precio = entry_precio.get()
-        tipo = tipo_var.get()
-
-        if validar_producto(nombre, "Nombre") and validar_num(talla, "Talla") and validar_num(precio, "Precio") and tipo:
-            producto = Producto(nombre, talla, float(precio), Tipo(tipo))
-            inventario.append(producto)  # Añadir el producto a la lista
+        if validar_producto(nombre, "Nombre") and validar_dir(direccion, "Dirección") and validar_tel(telefono, "Teléfono"):
+            cliente = Cliente(nombre, direccion, telefono)
+            clientes.append(cliente)  # Añadir el producto a la lista
             # Mostrar un messagebox con la información del producto creado
-            messagebox.showinfo("Éxito", f"Producto creado:\nNombre: {producto.nombre}\nTalla: {producto.talla}\nPrecio: {producto.precio}\nTipo: {producto.tipo.value}")
-            func3Top.destroy()  # Cierra la ventana después de crear el producto
+            messagebox.showinfo("Éxito", f"Producto creado:\nNombre: {cliente.nombre}\nDirección: {cliente.direccion}\nTeléfono: {cliente.telefono}")
+            self.destroy()  # Cierra la ventana después de crear el producto
             # Actualizar la lista en la ventana de mostrar productos, si está abierta
-            if hasattr(func3Top.master, 'mostrar_productos_window'):
-                func3Top.master.mostrar_productos_window.actualizar_lista()
-def abrir_func4():
-    func4Top=Toplevel(root)
-    func4Top.title("Eliminar Producto")
-    func4Top.geometry("500x500")
-    func4Top.configure(bg="azure")
+            if hasattr(self.master, 'mostrar_productos_window'):
+                self.master.mostrar_clientes_window.actualizar_lista()
 
-def abrir_func5():
-    func5Top=Toplevel(root)
-    func5Top.title("Inventario")
-    func5Top.geometry("500x500")
-    func5Top.configure(bg="azure")
+class EliminarClienteWindow(tk.Toplevel):
+    def __init__(self, master=None):
+        super().__init__(master)
+        self.title("Eliminar Producto")
+        self.geometry("400x300")
+        self.configure(bg="azure")
+        self.resizable(False,False)
+        self.clientes=babilon.getClientes()
+        # Crear el Frame que se centrará en la ventana
+        contenedor = tk.Frame(self)
+        contenedor.pack(expand=True, fill='both')
+
+        # Crear una Treeview para seleccionar el producto a eliminar
+        self.tree = ttk.Treeview(contenedor, columns=("Nombre", "Dirección", "Teléfono"), show='headings')
+        self.tree.heading("Nombre", text="Nombre")
+        self.tree.heading("Dirección", text="Dirección")
+        self.tree.heading("Teléfono", text="Teléfono")
+        self.tree.pack(expand=True, fill='both')
+
+        # Configurar el ancho de las columnas
+        self.tree.column("Nombre", width=100, anchor="w")
+        self.tree.column("Dirección", width=50, anchor="w")
+        self.tree.column("Teléfono", width=70, anchor="e")
+
+        # Botón para eliminar el producto seleccionado
+        boton_eliminar = tk.Button(contenedor, text="Eliminar Cliente", command=self.eliminar_cliente)
+        boton_eliminar.pack(pady=10)
+
+        # Rellenar el Treeview con los productos
+        self.actualizar_lista()
+
+    def actualizar_lista(self):
+        # Limpiar la vista antes de actualizar
+        for item in self.tree.get_children():
+            self.tree.delete(item)
+
+        # Añadir los productos a la vista
+        for cliente in self.clientes:
+            self.tree.insert("", "end", iid=cliente.nombre, values=(cliente.nombre, cliente.direccion, cliente.telefono))
+
+    def eliminar_cliente(self):
+        selected_item = self.tree.selection()
+        if not selected_item:
+            messagebox.showwarning("Advertencia", "Por favor, seleccione un cliente para eliminar.")
+            return
+
+        item_values = self.tree.item(selected_item[0])['values']
+        nombre = item_values[0]
+        
+        # Buscar y eliminar el producto
+        
+        self.clientes = [p for p in self.clientes if p.nombre != nombre]
+        babilon.setClientes(self.clientes)
+        messagebox.showinfo("Éxito", f"Cliente '{nombre}' eliminado correctamente.")
+        self.actualizar_lista()
+
+class MostrarClientesWindow(tk.Toplevel):
+    def __init__(self, master=None):
+        super().__init__(master)
+        self.title("Productos")
+        self.geometry("400x300")
+        self.configure(bg="azure")
+        self.resizable(False,False)
+        self.clientes=babilon.getClientes()
+        # Crear el Frame que se centrará en la ventana
+        contenedor = tk.Frame(self)
+        contenedor.pack(expand=True, fill='both')
+
+        # Crear una Treeview para mostrar los productos
+        self.tree = ttk.Treeview(contenedor, columns=("Nombre", "Dirección", "Teléfono"), show='headings')
+        self.tree.heading("Nombre", text="Nombre", command=lambda: self.ordenar_columnas("Nombre"))
+        self.tree.heading("Dirección", text="Dirección", command=lambda: self.ordenar_columnas("Dirección"))
+        self.tree.heading("Teléfono", text="Teléfono", command=lambda: self.ordenar_columnas("Teléfono"))
+        self.tree.pack(expand=True, fill='both')
+
+        # Configurar el ancho de las columnas
+        self.tree.column("Nombre", width=100, anchor="w")
+        self.tree.column("Dirección", width=50, anchor="w")
+        self.tree.column("Teléfono", width=70, anchor="e")
+
+        # Rellenar el Treeview con los productos
+        self.actualizar_lista()
+
+        # Actualizar la lista cada segundo
+        self.actualizar_periodicamente()
+
+    def actualizar_lista(self):
+        # Limpiar la vista antes de actualizar
+        for item in self.tree.get_children():
+            self.tree.delete(item)
+
+        # Añadir los productos a la vista
+        self.clientes=babilon.getClientes()
+        for cliente in self.clientes:
+            self.tree.insert("", "end", values=(cliente.nombre, cliente.direccion, cliente.telefono))
+
+    def actualizar_periodicamente(self):
+        # Actualizar la lista
+        self.actualizar_lista()
+        # Volver a llamar a esta función después de 1000 ms (1 segundo)
+        self.after(1000, self.actualizar_periodicamente)
+
+    def ordenar_columnas(self, columna):
+        # Determinar el orden actual
+        items = list(self.tree.get_children())
+        if self.tree.heading(columna, "text").endswith(" ↑"):
+            # Ordenar en orden descendente
+            items.sort(key=lambda x: self.tree.item(x, 'values')[self.tree["columns"].index(columna)], reverse=True)
+            self.tree.heading(columna, text=f"{columna} ↓")
+        else:
+            # Ordenar en orden ascendente
+            items.sort(key=lambda x: self.tree.item(x, 'values')[self.tree["columns"].index(columna)])
+            self.tree.heading(columna, text=f"{columna} ↑")
+
+        # Reinsertar los elementos ordenados
+        for item in items:
+            self.tree.move(item, '', 'end')
 
 def salir():
     serializar(babilon)
     exit()
+
+def abrir_ventana_clientes():
+    ClienteWindow(root)
+
+def abrir_ventana_mostrar_clientes():
+    global mostrar_clientes_window
+    mostrar_clientes_window = MostrarClientesWindow(root)
+
+def abrir_ventana_eliminar_clientes():
+    EliminarClienteWindow(root)
 
 # Función para abrir la ventana Toplevel (Crear Producto)
 def abrir_ventana_producto():
@@ -358,11 +458,12 @@ if __name__ == "__main__":
     etiqueta=tk.Label(frame1,text="Hora")
     hora()
 
-    boton_func1=tk.Button(frame1,text="Añadir\nCliente",command=abrir_func1)
-    boton_func2=tk.Button(frame1,text="Eliminar\nCliente",command=abrir_func2)
-    boton_func3=tk.Button(frame1,text="Añadir\nProducto",command=abrir_ventana_producto)
-    boton_func4=tk.Button(frame1,text="Eliminar\nProducto",command=abrir_ventana_eliminar_producto)
-    boton_func5=tk.Button(frame1,text="Consultar Inventario",command=abrir_ventana_mostrar_productos)
+    boton_func1=tk.Button(frame1,text="Añadir Cliente",command=abrir_ventana_clientes)
+    boton_func2=tk.Button(frame1,text="Eliminar Cliente",command=abrir_ventana_eliminar_clientes)
+    boton_func3=tk.Button(frame1,text="Consultar Clientes",command=abrir_ventana_mostrar_clientes)
+    boton_func4=tk.Button(frame1,text="Añadir Producto",command=abrir_ventana_producto)
+    boton_func5=tk.Button(frame1,text="Eliminar Producto",command=abrir_ventana_eliminar_producto)
+    boton_func6=tk.Button(frame1,text="Consultar Inventario",command=abrir_ventana_mostrar_productos)
     boton_salir=tk.Button(frame1,text="Salir",command=salir)
 
     etiqueta.grid(row=0,column=0,padx=0,pady=10,sticky="nsew")
@@ -371,7 +472,8 @@ if __name__ == "__main__":
     boton_func3.grid(row=3,column=0,padx=0,pady=10,sticky="nsew")
     boton_func4.grid(row=4,column=0,padx=0,pady=10,sticky="nsew")
     boton_func5.grid(row=5,column=0,padx=0,pady=10,sticky="nsew")
-    boton_salir.grid(row=6,column=0,padx=0,pady=10,sticky="nsew")
+    boton_func6.grid(row=6,column=0,padx=0,pady=10,sticky="nsew")
+    boton_salir.grid(row=7,column=0,padx=0,pady=10,sticky="nsew")
 
     frame1.configure(width=200,height=500,bg="azure",bd=5)
     frame2.configure(width=670,height=500,bg="light blue",bd=5)

@@ -13,6 +13,14 @@ class ErroresEntry(ErrorAplicacion):
 class ErroresTipo(ErrorAplicacion):
     pass
 
+class SoloLetrasNumerosSimbolos(ErrorAplicacion):
+    def __init__(self, campo):
+        super().__init__(f"El campo '{campo}' solo permite letras, números, y los símbolos #, -.")
+
+class SoloNumerosSimboloMas(ErrorAplicacion):
+    def __init__(self, campo):
+        super().__init__(f"El campo '{campo}' solo permite números y el símbolo +.")
+
 class CampoVacio(ErroresEntry):
     def __str__(self):
         return f"{super().__str__()} CampoVacio: El campo '{self.nombre_campo}' no puede estar vacío."
@@ -123,6 +131,35 @@ def validar_producto(entry_text, nombre_campo):
         
         if any(c in "!@#$%^&*()_+=-{}[]|\:;<>,?/'\"" for c in entry_text):
             raise NoUsarSimbolos(nombre_campo)
+
+        return True
+    except ErrorAplicacion as e:
+        messagebox.showerror("Error", str(e))
+        return False
+    
+def validar_dir(entry_text, nombre_campo):
+    try:
+        entry_text = entry_text.strip()
+        if not entry_text:
+            raise CampoVacio(nombre_campo)
+
+        if not all(c.isalnum() or c in "#-" for c in entry_text):
+            raise SoloLetrasNumerosSimbolos(nombre_campo)
+
+        return True
+    except ErrorAplicacion as e:
+        messagebox.showerror("Error", str(e))
+        return False
+
+# Función para validar teléfono: números y símbolo +
+def validar_tel(entry_text, nombre_campo):
+    try:
+        entry_text = entry_text.strip()
+        if not entry_text:
+            raise CampoVacio(nombre_campo)
+
+        if not all(c.isdigit() or c == "+" for c in entry_text):
+            raise SoloNumerosSimboloMas(nombre_campo)
 
         return True
     except ErrorAplicacion as e:
