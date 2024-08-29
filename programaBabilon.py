@@ -4,6 +4,8 @@ from tkinter import messagebox, ttk
 from datetime import datetime
 from enum import Enum
 import time
+from baseDatos.serializacion import serializar, deserializar
+from excepciones import *
 
 class Tipo(Enum):
     Tennis = "Tennis"
@@ -51,20 +53,15 @@ class Babilon:
         self.clientes=[]
         self.inventario=[]
 
-class InfoApp:
-    def __init__(self,frame):
-        self.row_height=500
-        self.col_width=400
-        self.frame=frame
-        self.frameApp=Frame(self.frame,bg="#c3c3c3",width=550,height=400)
-        self.frameApp.grid(row=0,column=0,sticky="nsew")
-        Label(self.frameApp,text="Bienvenido a la aplicación de gestión administrativa de Babiloon Shoes", font=("Bold",12)).place(x=10,y=30)
-        descripcion="Mediante esta aplicación podrás gestionar activamente\n las ventas, clientes e inventario del almacén"
-        Label(self.frameApp,text=descripcion,font=("Bond",10)).place(x=10,y=150)
+    def getClientes(self):
+        return self.clientes
+
+    def getInventario(self):
+        return self.inventario
 
 def abrir_func1():
     func1Top=Toplevel(root)
-    func1Top.title("Funcionalidad 1")
+    func1Top.title("Añadir Cliente")
     func1Top.geometry("500x500")
     func1Top.configure(bg="azure")
 
@@ -92,6 +89,10 @@ def abrir_func5():
     func5Top.geometry("500x500")
     func5Top.configure(bg="azure")
 
+def salir():
+    serializar(babilon)
+    exit()
+
 def func1():
     pass
 def func2():
@@ -106,6 +107,10 @@ def func5():
 def hora():
     etiqueta.config(text=time.strftime("%H:%M:%S"))
     root.after(1000,hora)
+
+babilon=Babilon()
+clientes=babilon.getClientes()
+inventario=babilon.getInventario()
 
 if __name__ == "__main__":
     root = tk.Tk()
@@ -129,6 +134,7 @@ if __name__ == "__main__":
     boton_func3=tk.Button(frame1,text="Func3",command=abrir_func3)
     boton_func4=tk.Button(frame1,text="Func4",command=abrir_func4)
     boton_func5=tk.Button(frame1,text="Func5",command=abrir_func5)
+    boton_salir=tk.Button(frame1,text="Salir",command=salir)
 
     etiqueta.grid(row=0,column=0,padx=0,pady=10,sticky="nsew")
     boton_func1.grid(row=1,column=0,padx=0,pady=10,sticky="nsew")
@@ -136,6 +142,7 @@ if __name__ == "__main__":
     boton_func3.grid(row=3,column=0,padx=0,pady=10,sticky="nsew")
     boton_func4.grid(row=4,column=0,padx=0,pady=10,sticky="nsew")
     boton_func5.grid(row=5,column=0,padx=0,pady=10,sticky="nsew")
+    boton_salir.grid(row=6,column=0,padx=0,pady=10,sticky="nsew")
 
     frame1.configure(width=200,height=500,bg="azure",bd=5)
     frame2.configure(width=670,height=500,bg="light blue",bd=5)
