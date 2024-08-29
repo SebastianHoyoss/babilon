@@ -45,6 +45,12 @@ class Venta:
         self.pedido = pedido
         self.valor_total = valor_total
 
+class Babilon:
+    def __init__(self, nombre="Babiloon",clientes=[],inventario=[]):
+        self.nombre=nombre
+        self.clientes=[]
+        self.inventario=[]
+
 class InfoApp:
     def __init__(self,frame):
         self.row_height=500
