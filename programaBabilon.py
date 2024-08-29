@@ -56,16 +56,36 @@ class InfoApp:
         descripcion="Mediante esta aplicación podrás gestionar activamente\n las ventas, clientes e inventario del almacén"
         Label(self.frameApp,text=descripcion,font=("Bond",10)).place(x=10,y=150)
 
-def eliminar_frame():
-    for widget in root.winfo_children():
-        if(isinstance(widget,Frame)):
-            widget.destroy
-def info():
-    eliminar_frame()
-    info_frame=tk.Frame(frame2,padx=5,pady=5,bg="sky blue")
-    InfoApp(info_frame)
-    info_frame.grid(row=1,column=0,sticky="nsew")
-    info_frame.pack_propagate(False)
+def abrir_func1():
+    func1Top=Toplevel(root)
+    func1Top.title("Funcionalidad 1")
+    func1Top.geometry("500x500")
+    func1Top.configure(bg="azure")
+
+def abrir_func2():
+    func2Top=Toplevel(root)
+    func2Top.title("Funcionalidad 2")
+    func2Top.geometry("500x500")
+    func2Top.configure(bg="azure")
+
+def abrir_func3():
+    func3Top=Toplevel(root)
+    func3Top.title("Funcionalidad 3")
+    func3Top.geometry("500x500")
+    func3Top.configure(bg="azure")
+
+def abrir_func4():
+    func4Top=Toplevel(root)
+    func4Top.title("Funcionalidad 4")
+    func4Top.geometry("500x500")
+    func4Top.configure(bg="azure")
+
+def abrir_func5():
+    func5Top=Toplevel(root)
+    func5Top.title("Funcionalidad 5")
+    func5Top.geometry("500x500")
+    func5Top.configure(bg="azure")
+
 def func1():
     pass
 def func2():
@@ -95,23 +115,22 @@ if __name__ == "__main__":
     frame2.grid(row=1,column=1,sticky="nsew")
     frame2.pack_propagate(False)
 
-    etiqueta=tk.Label(root,text="Hora")
+    etiqueta=tk.Label(frame1,text="Hora")
     hora()
-    etiqueta.grid(row=1,column=2,sticky="n")
-    boton_info=tk.Button(frame1,text="Info",command=info)
-    boton_func1=tk.Button(frame1,text="Func1",command=func1)
-    boton_func2=tk.Button(frame1,text="Func2",command=func2)
-    boton_func3=tk.Button(frame1,text="Func3",command=func3)
-    boton_func4=tk.Button(frame1,text="Func4",command=func4)
-    boton_func5=tk.Button(frame1,text="Func5",command=func5)
 
-    boton_info.grid(row=0,column=0,padx=0,pady=10,sticky="nsew")
+    boton_func1=tk.Button(frame1,text="Func1",command=abrir_func1)
+    boton_func2=tk.Button(frame1,text="Func2",command=abrir_func2)
+    boton_func3=tk.Button(frame1,text="Func3",command=abrir_func3)
+    boton_func4=tk.Button(frame1,text="Func4",command=abrir_func4)
+    boton_func5=tk.Button(frame1,text="Func5",command=abrir_func5)
+
+    etiqueta.grid(row=0,column=0,padx=0,pady=10,sticky="nsew")
     boton_func1.grid(row=1,column=0,padx=0,pady=10,sticky="nsew")
     boton_func2.grid(row=2,column=0,padx=0,pady=10,sticky="nsew")
     boton_func3.grid(row=3,column=0,padx=0,pady=10,sticky="nsew")
     boton_func4.grid(row=4,column=0,padx=0,pady=10,sticky="nsew")
     boton_func5.grid(row=5,column=0,padx=0,pady=10,sticky="nsew")
 
-    frame1.configure(width=100,height=500,bg="azure",bd=5)
-    frame2.configure(width=600,height=400,bg="light blue",bd=5)
+    frame1.configure(width=200,height=500,bg="azure",bd=5)
+    frame2.configure(width=670,height=500,bg="light blue",bd=5)
     root.mainloop()
