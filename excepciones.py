@@ -143,7 +143,7 @@ def validar_dir(entry_text, nombre_campo):
         if not entry_text:
             raise CampoVacio(nombre_campo)
 
-        if not all(c.isalnum() or c in "#-" for c in entry_text):
+        if not all(c.isalnum() or c in "#- " for c in entry_text):
             raise SoloLetrasNumerosSimbolos(nombre_campo)
 
         return True
@@ -158,7 +158,7 @@ def validar_tel(entry_text, nombre_campo):
         if not entry_text:
             raise CampoVacio(nombre_campo)
 
-        if not all(c.isdigit() or c == "+" for c in entry_text):
+        if not all(c.isdigit() or c == "+ " for c in entry_text):
             raise SoloNumerosSimboloMas(nombre_campo)
 
         return True
