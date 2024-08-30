@@ -18,11 +18,12 @@ class Tipo2(Enum):
     Devuelto = "Devuelto"
 
 class Producto:
-    def __init__(self, nombre, talla, precio, tipo):
+    def __init__(self, nombre, talla, precio, tipo, cantidad):
         self.nombre = nombre
         self.talla = talla
         self.precio = precio
         self.tipo = tipo
+        self.cantidad= cantidad
 
 class Pedido:
     def __init__(self, numero, hora_salida, hora_entrega, productos, estado):
@@ -65,6 +66,24 @@ class Babilon:
     def setClientes(self,clientes):
         self.clientes=clientes
 
+    def agregar_producto(self, producto):
+
+        for p in self.inventario:
+            if p.nombre == producto.nombre and p.talla == producto.talla:
+                p.cantidad += producto.cantidad
+                return
+        self.inventario.append(producto)
+
+    def eliminar_producto(self, nombre, cantidad,inventario):
+        self.inventario=inventario
+        for p in self.inventario:
+            if p.nombre == nombre:
+                if p.cantidad <= cantidad:
+                    self.inventario.remove(p)
+                else:
+                    p.cantidad -= cantidad
+                return self.inventario
+
 # Clase para la ventana Toplevel (Crear Producto)
 class ProductoWindow(tk.Toplevel):
     def __init__(self, master=None):
@@ -99,21 +118,26 @@ class ProductoWindow(tk.Toplevel):
         self.combo_tipo['values'] = [tipo.value for tipo in Tipo]
         self.combo_tipo.grid(row=3, column=1, padx=10, pady=5, sticky="w")
 
+        tk.Label(contenedor, text="Cantidad").grid(row=4, column=0, padx=10, pady=5, sticky="e")
+        self.entry_cantidad = tk.Entry(contenedor, width=20)
+        self.entry_cantidad.grid(row=4, column=1, padx=10, pady=5, sticky="w")
+
         # Botón para crear el producto
         boton_crear = tk.Button(contenedor, text="Añadir Producto", command=self.crear_producto)
-        boton_crear.grid(row=4, columnspan=2, pady=10)
+        boton_crear.grid(row=5, columnspan=2, pady=10)
 
     def crear_producto(self):
         nombre = self.entry_nombre.get()
         talla = self.entry_talla.get()
         precio = self.entry_precio.get()
         tipo = self.tipo_var.get()
+        cantidad = self.entry_cantidad.get()
 
-        if validar_producto(nombre, "Nombre") and validar_num(talla, "Talla") and validar_num(precio, "Precio") and tipo:
-            producto = Producto(nombre, talla, float(precio), Tipo(tipo))
-            inventario.append(producto)  # Añadir el producto a la lista
+        if validar_producto(nombre, "Nombre") and validar_num(talla, "Talla") and validar_num(precio, "Precio") and validar_num(cantidad, "Cantidad") and tipo:
+            producto = Producto(nombre, talla, float(precio), Tipo(tipo), int(cantidad))
+            babilon.agregar_producto(producto)  # Añadir el producto a la lista
             # Mostrar un messagebox con la información del producto creado
-            messagebox.showinfo("Éxito", f"Producto creado:\nNombre: {producto.nombre}\nTalla: {producto.talla}\nPrecio: {producto.precio}\nTipo: {producto.tipo.value}")
+            messagebox.showinfo("Éxito", f"Producto creado:\nNombre: {producto.nombre}\nTalla: {producto.talla}\nPrecio: {producto.precio}\nTipo: {producto.tipo.value}\nCantidad: {producto.cantidad}")
             self.destroy()  # Cierra la ventana después de crear el producto
             # Actualizar la lista en la ventana de mostrar productos, si está abierta
             if hasattr(self.master, 'mostrar_productos_window'):
@@ -133,11 +157,12 @@ class MostrarProductosWindow(tk.Toplevel):
         contenedor.pack(expand=True, fill='both')
 
         # Crear una Treeview para mostrar los productos
-        self.tree = ttk.Treeview(contenedor, columns=("Nombre", "Talla", "Precio", "Tipo"), show='headings')
+        self.tree = ttk.Treeview(contenedor, columns=("Nombre", "Talla", "Precio", "Tipo","Cantidad"), show='headings')
         self.tree.heading("Nombre", text="Nombre", command=lambda: self.ordenar_columnas("Nombre"))
         self.tree.heading("Talla", text="Talla", command=lambda: self.ordenar_columnas("Talla"))
         self.tree.heading("Precio", text="Precio", command=lambda: self.ordenar_columnas("Precio"))
         self.tree.heading("Tipo", text="Tipo", command=lambda: self.ordenar_columnas("Tipo"))
+        self.tree.heading("Cantidad", text="Cantidad", command=lambda: self.ordenar_columnas("Cantidad"))
         self.tree.pack(expand=True, fill='both')
 
         # Configurar el ancho de las columnas
@@ -145,6 +170,7 @@ class MostrarProductosWindow(tk.Toplevel):
         self.tree.column("Talla", width=50, anchor="w")
         self.tree.column("Precio", width=70, anchor="e")
         self.tree.column("Tipo", width=80, anchor="w")
+        self.tree.column("Cantidad", width=80, anchor="w")
 
         # Rellenar el Treeview con los productos
         self.actualizar_lista()
@@ -160,7 +186,7 @@ class MostrarProductosWindow(tk.Toplevel):
         # Añadir los productos a la vista
         inventario=babilon.getInventario()
         for producto in inventario:
-            self.tree.insert("", "end", values=(producto.nombre, producto.talla, producto.precio, producto.tipo.value))
+            self.tree.insert("", "end", values=(producto.nombre, producto.talla, producto.precio, producto.tipo.value,producto.cantidad))
 
     def actualizar_periodicamente(self):
         # Actualizar la lista
@@ -198,11 +224,12 @@ class EliminarProductoWindow(tk.Toplevel):
         contenedor.pack(expand=True, fill='both')
 
         # Crear una Treeview para seleccionar el producto a eliminar
-        self.tree = ttk.Treeview(contenedor, columns=("Nombre", "Talla", "Precio", "Tipo"), show='headings')
+        self.tree = ttk.Treeview(contenedor, columns=("Nombre", "Talla", "Precio", "Tipo","Cantidad"), show='headings')
         self.tree.heading("Nombre", text="Nombre")
         self.tree.heading("Talla", text="Talla")
         self.tree.heading("Precio", text="Precio")
         self.tree.heading("Tipo", text="Tipo")
+        self.tree.heading("Cantidad", text="Cantidad")
         self.tree.pack(expand=True, fill='both')
 
         # Configurar el ancho de las columnas
@@ -210,6 +237,13 @@ class EliminarProductoWindow(tk.Toplevel):
         self.tree.column("Talla", width=50, anchor="w")
         self.tree.column("Precio", width=70, anchor="e")
         self.tree.column("Tipo", width=80, anchor="w")
+        self.tree.column("Cantidad", width=80, anchor="w")
+        
+        cantidad_eliminar=Label(contenedor,text="Cantidad a eliminar")
+        cantidad_eliminar.pack()
+
+        self.entry_nombre = tk.Entry(contenedor, width=20)
+        self.entry_nombre.pack()
 
         # Botón para eliminar el producto seleccionado
         boton_eliminar = tk.Button(contenedor, text="Eliminar Producto", command=self.eliminar_producto)
@@ -225,22 +259,23 @@ class EliminarProductoWindow(tk.Toplevel):
 
         # Añadir los productos a la vista
         for producto in self.inventario:
-            self.tree.insert("", "end", iid=producto.nombre, values=(producto.nombre, producto.talla, producto.precio, producto.tipo.value))
+            self.tree.insert("", "end", iid=producto.nombre, values=(producto.nombre, producto.talla, producto.precio, producto.tipo.value,producto.cantidad))
 
     def eliminar_producto(self):
+        cantidad=self.entry_nombre.get()
         selected_item = self.tree.selection()
         if not selected_item:
             messagebox.showwarning("Advertencia", "Por favor, seleccione un producto para eliminar.")
             return
-
-        item_values = self.tree.item(selected_item[0])['values']
-        nombre = item_values[0]
-        
+        if validar_num(cantidad,"Cantidad"):
+            item_values = self.tree.item(selected_item[0])['values']
+            nombre = item_values[0]
+            cantidad=int(cantidad)
         # Buscar y eliminar el producto
-        
-        self.inventario = [p for p in self.inventario if p.nombre != nombre]
-        babilon.setInv(self.inventario)
-        messagebox.showinfo("Éxito", f"Producto '{nombre}' eliminado correctamente.")
+            new_inv=babilon.eliminar_producto(nombre,cantidad,inventario)
+            self.inventario=new_inv
+            babilon.setInv(self.inventario)
+        messagebox.showinfo("Éxito", f"{cantidad} de '{nombre}' eliminado correctamente.")
         self.actualizar_lista()
 
 class ClienteWindow(tk.Toplevel):
