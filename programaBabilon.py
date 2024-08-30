@@ -84,6 +84,15 @@ class Babilon:
                     p.cantidad -= cantidad
                 return self.inventario
 
+    def agregar_cliente(self, cliente):
+        self.clientes.append(cliente)
+        return self.clientes
+    
+    def retirar_cliente(self,nombre,clientes):
+        self.clientes=clientes
+        for p in self.clientes:
+            if p.nombre==nombre:
+                self.clientes.remove(p)
 # Clase para la ventana Toplevel (Crear Producto)
 class ProductoWindow(tk.Toplevel):
     def __init__(self, master=None):
@@ -288,7 +297,7 @@ class ClienteWindow(tk.Toplevel):
         # Crear el Frame que se centrará en la ventana
         contenedor = tk.Frame(self)
         contenedor.pack(expand=True, fill='both')
-
+        self.clientes=babilon.getClientes()
         # Campo para el nombre
         tk.Label(contenedor, text="Nombre").grid(row=0, column=0, padx=10, pady=5, sticky="e")
         self.entry_nombre = tk.Entry(contenedor, width=20)
@@ -315,7 +324,7 @@ class ClienteWindow(tk.Toplevel):
 
         if validar_producto(nombre, "Nombre") and validar_dir(direccion, "Dirección") and validar_tel(telefono, "Teléfono"):
             cliente = Cliente(nombre, direccion, telefono)
-            clientes.append(cliente)  # Añadir el producto a la lista
+            babilon.agregar_cliente(cliente)  # Añadir el producto a la lista
             # Mostrar un messagebox con la información del producto creado
             messagebox.showinfo("Éxito", f"Cliente creado:\nNombre: {cliente.nombre}\nDirección: {cliente.direccion}\nTeléfono: {cliente.telefono}")
             self.destroy()  # Cierra la ventana después de crear el producto
