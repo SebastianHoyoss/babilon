@@ -282,16 +282,16 @@ class ClienteWindow(tk.Toplevel):
             cliente = Cliente(nombre, direccion, telefono)
             clientes.append(cliente)  # Añadir el producto a la lista
             # Mostrar un messagebox con la información del producto creado
-            messagebox.showinfo("Éxito", f"Producto creado:\nNombre: {cliente.nombre}\nDirección: {cliente.direccion}\nTeléfono: {cliente.telefono}")
+            messagebox.showinfo("Éxito", f"Cliente creado:\nNombre: {cliente.nombre}\nDirección: {cliente.direccion}\nTeléfono: {cliente.telefono}")
             self.destroy()  # Cierra la ventana después de crear el producto
             # Actualizar la lista en la ventana de mostrar productos, si está abierta
-            if hasattr(self.master, 'mostrar_productos_window'):
+            if hasattr(self.master, 'mostrar_clientes_window'):
                 self.master.mostrar_clientes_window.actualizar_lista()
 
 class EliminarClienteWindow(tk.Toplevel):
     def __init__(self, master=None):
         super().__init__(master)
-        self.title("Eliminar Producto")
+        self.title("Eliminar Cliente")
         self.geometry("400x300")
         self.configure(bg="azure")
         self.resizable(False,False)
@@ -347,7 +347,7 @@ class EliminarClienteWindow(tk.Toplevel):
 class MostrarClientesWindow(tk.Toplevel):
     def __init__(self, master=None):
         super().__init__(master)
-        self.title("Productos")
+        self.title("Clientes")
         self.geometry("400x300")
         self.configure(bg="azure")
         self.resizable(False,False)
