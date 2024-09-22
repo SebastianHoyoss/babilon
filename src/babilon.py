@@ -1,3 +1,6 @@
+from src.producto import *
+from src.cliente import *
+
 class Babilon:
     def __init__(self, nombre="Babiloon",clientes=[],inventario=[]):
         self.nombre=nombre
