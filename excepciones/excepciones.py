@@ -15,11 +15,11 @@ class ErroresTipo(ErrorAplicacion):
 
 class SoloLetrasNumerosSimbolos(ErrorAplicacion):
     def __init__(self, campo):
-        super().__init__(f"El campo '{campo}' solo permite letras, números, y los símbolos #, -.")
+        return f"{ super().__init__() } El campo '{campo}' solo permite letras, números, y los símbolos #, -."
 
 class SoloNumerosSimboloMas(ErrorAplicacion):
     def __init__(self, campo):
-        super().__init__(f"El campo '{campo}' solo permite números y el símbolo +.")
+        return f"{ super().__init__()} El campo '{campo}' solo permite números y el símbolo +."
 
 class CampoVacio(ErroresEntry):
     def __str__(self):
@@ -73,7 +73,7 @@ def validar_num(entry_text, nombre_campo):
         if '.' in entry_text:
             raise NoUsarDecimales(nombre_campo)
 
-        if any(c in "!@#$%^&*()_+=-{}[]|\:;<>,?/'\"" for c in entry_text):
+        if any(c in "!@#$%^&*()_+=-{}[]|:;<>,?/\'\\\"" for c in entry_text):
             raise NoUsarSimbolos(nombre_campo)
 
         numero = int(entry_text)
@@ -111,12 +111,12 @@ def validar_nombre(entry_text, nombre_campo):
         entry_text = entry_text.strip()
         if not entry_text:
             raise CampoVacio(nombre_campo)
+        
+        if any(c in "!@#$%^&*()_+=-{}[]|:;<>,?/\'\\\"" for c in entry_text):
+            raise NoUsarSimbolos(nombre_campo)
 
         if not entry_text.isalpha():
             raise SoloLetras(nombre_campo)
-        
-        if any(c in "!@#$%^&*()_+=-{}[]|\:;<>,?/'\"" for c in entry_text):
-            raise NoUsarSimbolos(nombre_campo)
 
         return True
     except ErrorAplicacion as e:
@@ -129,7 +129,7 @@ def validar_producto(entry_text, nombre_campo):
         if not entry_text:
             raise CampoVacio(nombre_campo)
         
-        if any(c in "!@#$%^&*()_+=-{}[]|\:;<>,?/'\"" for c in entry_text):
+        if any(c in "!@#$%^&*()_+=-{}[]|:;<>,?/\'\\\"" for c in entry_text):
             raise NoUsarSimbolos(nombre_campo)
 
         return True
@@ -143,7 +143,7 @@ def validar_dir(entry_text, nombre_campo):
         if not entry_text:
             raise CampoVacio(nombre_campo)
 
-        if not all(c.isalnum() or c in "#- " for c in entry_text):
+        if not all(c.isalnum() or c not in "#- " for c in entry_text):
             raise SoloLetrasNumerosSimbolos(nombre_campo)
 
         return True
