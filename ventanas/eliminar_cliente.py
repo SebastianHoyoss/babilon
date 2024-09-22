@@ -18,6 +18,7 @@ class EliminarClienteWindow(tk.Toplevel):
         self.configure(bg="azure")
         self.resizable(False,False)
         self.clientes=babilon.getClientes()
+        self.babilon = babilon
         # Crear el Frame que se centrará en la ventana
         contenedor = tk.Frame(self)
         contenedor.pack(expand=True, fill='both')

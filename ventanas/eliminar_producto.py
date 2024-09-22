@@ -15,7 +15,7 @@ class EliminarProductoWindow(tk.Toplevel):
         self.geometry("400x300")
         self.configure(bg="azure")
         self.resizable(False,False)
-        self.self.babilon = self.babilon
+        self.babilon = babilon
         self.inventario=self.babilon.getInventario()
         # Crear el Frame que se centrará en la ventana
         contenedor = tk.Frame(self)
@@ -70,7 +70,7 @@ class EliminarProductoWindow(tk.Toplevel):
             nombre = item_values[0]
             cantidad=int(cantidad)
         # Buscar y eliminar el producto
-            new_inv=self.babilon.eliminar_producto(nombre,cantidad, Babilon.inventario)
+            new_inv=self.babilon.eliminar_producto(nombre,cantidad, self.babilon.inventario)
             self.inventario=new_inv
             self.babilon.setInv(self.inventario)
         messagebox.showinfo("Éxito", f"{cantidad} de '{nombre}' eliminado correctamente.")
