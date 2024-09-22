@@ -67,7 +67,7 @@ class EliminarProductoWindow(tk.Toplevel):
             return
         if validar_num(cantidad,"Cantidad"):
             item_values = self.tree.item(selected_item[0])['values']
-            nombre = item_values[0]
+            nombre = str(item_values[0])
             cantidad=int(cantidad)
         # Buscar y eliminar el producto
             new_inv=self.babilon.eliminar_producto(nombre,cantidad, self.babilon.inventario)
