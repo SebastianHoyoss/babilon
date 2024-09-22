@@ -1,6 +1,6 @@
 from tkinter import *
 import tkinter as tk
-from tkinter import messagebox, ttk
+from tkinter import messagebox, ttk, simpledialog
 from datetime import datetime
 from enum import Enum
 import time
@@ -13,9 +13,24 @@ from ventanas.eliminar_producto import *
 from ventanas.mostrar_cliente import *
 from ventanas.mostrar_producto import *
 
+user="admin"
+password="admin"
 def salir():
     serializar(babilon)
     exit()
+
+def validar_login():
+    global password
+    usuario = entry_usuario.get()
+    contra = entry_contraseña.get()
+
+    if usuario==user and contra==password:
+        messagebox.showinfo("Bienvenido", f"Se ha iniciado sesión correctamente!")
+        ventana_login.destroy()
+        root.deiconify()
+    else:
+        messagebox.showinfo("Error", "Credenciales incorrectas")
+
 
 # Función para abrir la ventana Toplevel (Crear Cliente)
 def abrir_ventana_clientes():
@@ -45,6 +60,7 @@ def abrir_ventana_eliminar_producto():
 
 def hora():
     etiqueta.config(text=time.strftime("%H:%M:%S"))
+    serializar(babilon)
     root.after(1000,hora)
 
 babilon=deserializar()
@@ -87,4 +103,20 @@ if __name__ == "__main__":
 
     frame1.configure(width=200,height=500,bg="azure",bd=5)
     frame2.configure(width=670,height=500,bg="light blue",bd=5)
-    root.mainloop()
+
+    root.withdraw()
+    ventana_login=tk.Tk()
+    ventana_login.title("Iniciar Sesión")
+    ventana_login.geometry("250x200")
+    tk.Label(ventana_login, text="Usuario").grid(row=0, column=0, padx=10, pady=10)
+    entry_usuario = tk.Entry(ventana_login)
+    entry_usuario.grid(row=0, column=1, padx=10, pady=10)
+
+    tk.Label(ventana_login, text="Contraseña").grid(row=1, column=0, padx=10, pady=10)
+    entry_contraseña = tk.Entry(ventana_login, show="*")  # 'show="*"' oculta la contraseña
+    entry_contraseña.grid(row=1, column=1, padx=10, pady=10)
+
+    # Botón de login
+    boton_login = tk.Button(ventana_login, text="Iniciar sesión", command=validar_login)
+    boton_login.grid(row=2, column=0, columnspan=2, pady=10)
+    ventana_login.mainloop()
