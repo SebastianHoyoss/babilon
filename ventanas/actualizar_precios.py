@@ -5,7 +5,7 @@ class actualizarPreciosWindow(tk.Toplevel):
     def __init__(self, master=None, babilon=None):
         super().__init__(master)
         self.title("Productos")
-        self.geometry("400x400") 
+        self.geometry("400x400")
         self.configure(bg="azure")
         self.resizable(False, False)
         self.babilon = babilon
@@ -23,9 +23,9 @@ class actualizarPreciosWindow(tk.Toplevel):
         self.tree.heading("Tipo", text="Tipo", command=lambda: self.ordenar_columnas("Tipo"))
         self.tree.pack(expand=True, fill='both')
 
-        self.tree.column("Nombre", width=100, anchor="e")
+        self.tree.column("Nombre", width=100, anchor="w")
         self.tree.column("Precio", width=70, anchor="e")
-        self.tree.column("Tipo", width=80, anchor="e")
+        self.tree.column("Tipo", width=80, anchor="w")
 
         self.tree.bind("<Double-1>", self.edit_price)  #Doble click para editar el precio
 
@@ -48,51 +48,41 @@ class actualizarPreciosWindow(tk.Toplevel):
         # Permite modificar el precio directamente en la celda
         selected_item = self.tree.selection()[0]  
         column_id = self.tree.identify_column(event.x)  
-
         if column_id == '#2':  # 2 corresponde a la columna de precio
-            x, y, width, height = self.tree.bbox(selected_item, column=1)
-
-            # Obtenemos el valor actual del precio
             current_value = self.tree.item(selected_item, 'values')[1]
 
-            # Creamos un widget de entrada para superponer sobre la celda
-            self.entry = tk.Entry(self.tree)
-            self.entry.place(x=x, y=y, width=width, height=height)
-            self.entry.insert(0, current_value) # Insercion del nuevo valor
-            self.entry.focus()
+            self.edit_window = tk.Toplevel(self)
+            self.edit_window.title(f'Editar Precio')
+            self.edit_window.geometry("300x150")
+            entry = tk.Entry(self.edit_window)
+            entry.insert(0, current_value) # Insercion del nuevo valor
+            entry.pack(pady=10)
 
-            # Enter para guardar cambios
-            self.entry.bind("<Return>", lambda event: self.save_price(selected_item))
+            def save_price():
+                new_value = entry.get()
+                try:
+                    new_value = float(new_value) # Validamos que el valor ingresado sea float
 
-            # Esc para salir
-            self.entry.bind("<Escape>", lambda event: self.entry.destroy())
+                    # Actualizamos los datos
+                    current_values = list(self.tree.item(selected_item, 'values'))
+                    current_values[1] = new_value  #Actualizacion del precio
+                    self.tree.item(selected_item, values=current_values)
 
-    def save_price(self, item):
-        new_value = self.entry.get()
-        
-        try:
-            # Validamos que el valor ingresado sea float
-            new_value = float(new_value)
-            
-            # Actualizamos los datos
-            current_values = list(self.tree.item(item, 'values'))
-            current_values[1] = new_value  # Actualizacion del precio
-            self.tree.item(item, values=current_values)
+                    # Guardamos los nuevos precios en el diccionario
+                    self.modified_prices[current_values[0]] = new_value
+                    self.edit_window.destroy()
+                except ValueError:
+                    messagebox.showerror("Error", "Por favor ingrese un precio válido")
 
-            # Guardamos los nuevos precios en el diccionario
-            self.modified_prices[current_values[0]] = new_value
-
-            self.entry.destroy()
-
-        except ValueError:
-            messagebox.showerror("Error", "Por favor ingrese un precio válido")
+            save_button = tk.Button(self.edit_window, text="Guardar", command=save_price)
+            save_button.pack(pady=10)
 
     def actualizar_precios(self):
         if not self.modified_prices:
             messagebox.showinfo("Info", "No hay cambios de precio que aplicar.")
             return
 
-        # Actualizamos lo productos (asumiendo que su nombre es unico)
+        # Actualizamos los productos (asumiendo que su nombre es unico)
         for producto in self.babilon.getInventario():
             if producto.nombre in self.modified_prices:
                 producto.precio = self.modified_prices[producto.nombre]
