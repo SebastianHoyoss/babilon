@@ -23,7 +23,7 @@ class EliminarClienteWindow(tk.Toplevel):
         contenedor = tk.Frame(self)
         contenedor.pack(expand=True, fill='both')
 
-        # Crear una Treeview para seleccionar el producto a eliminar
+        # Crear una Treeview para seleccionar el cliente a eliminar
         self.tree = ttk.Treeview(contenedor, columns=("Nombre", "Dirección", "Teléfono"), show='headings')
         self.tree.heading("Nombre", text="Nombre")
         self.tree.heading("Dirección", text="Dirección")
@@ -35,11 +35,11 @@ class EliminarClienteWindow(tk.Toplevel):
         self.tree.column("Dirección", width=50, anchor="w")
         self.tree.column("Teléfono", width=70, anchor="e")
 
-        # Botón para eliminar el producto seleccionado
+        # Botón para eliminar el cliente seleccionado
         boton_eliminar = tk.Button(contenedor, text="Eliminar Cliente", command=self.eliminar_cliente)
         boton_eliminar.pack(pady=10)
 
-        # Rellenar el Treeview con los productos
+        # Rellenar el Treeview con los clientes
         self.actualizar_lista()
 
     def actualizar_lista(self):

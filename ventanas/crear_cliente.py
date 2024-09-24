@@ -3,7 +3,7 @@ from src.cliente import Cliente
 from excepciones.excepciones import *
 
 # Clase para la ventana Toplevel (Crear Cliente)
-class ClienteWindow(tk.Toplevel):
+class CrearClienteWindow(tk.Toplevel):
     def __init__(self, master=None, babilon=None):
         super().__init__(master)
         self.title("Añadir Cliente")
@@ -35,16 +35,16 @@ class ClienteWindow(tk.Toplevel):
         boton_crear.grid(row=4, columnspan=2, pady=10)
 
     def crear_cliente(self):
+        
+        nuevo_id = f"{len(self.clientes) + 1:03}"
         nombre = self.entry_nombre.get()
         direccion = self.entry_direccion.get()
         telefono = self.entry_telefono.get()
 
         if validar_nombre(nombre, "Nombre") and validar_dir(direccion, "Dirección") and validar_tel(telefono, "Teléfono"):            
-            cliente = Cliente(nombre, direccion, telefono)
+            cliente = Cliente(nuevo_id, nombre, direccion, telefono)
             self.babilon.agregar_cliente(cliente)  # Añadir el producto a la lista
             # Mostrar un messagebox con la información del producto creado
-            messagebox.showinfo("Éxito", f"Cliente creado:\nNombre: {cliente.nombre}\nDirección: {cliente.direccion}\nTeléfono: {cliente.telefono}")
+            messagebox.showinfo("Éxito", f"Cliente creado:\nID: {cliente.id}\nNombre: {cliente.nombre}\nDirección: {cliente.direccion}\nTeléfono: {cliente.telefono}")
             self.destroy()  # Cierra la ventana después de crear el producto
             # Actualizar la lista en la ventana de mostrar productos, si está abierta
-            if hasattr(self.master, 'mostrar_clientes_window'):
-                self.master.mostrar_clientes_window.actualizar_lista()

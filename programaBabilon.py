@@ -14,6 +14,7 @@ from ventanas.mostrar_cliente import *
 from ventanas.mostrar_producto import *
 from ventanas.registrar_venta import *
 from ventanas.actualizar_precios import *
+from ventanas.gestion_cliente import *
 
 user="admin"
 password="admin"
