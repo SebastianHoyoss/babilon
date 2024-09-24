@@ -1,12 +1,15 @@
 from src.producto import *
 from src.cliente import *
+from src.venta import *
 
 class Babilon:
-    def __init__(self, nombre="Babiloon",clientes=[],inventario=[]):
+    def __init__(self, nombre="Babiloon",clientes=[],inventario=[],ventasL=[],ventasN=[],ventasT=[]):
         self.nombre=nombre
-        self.clientes=[]
-        self.inventario=[]
-
+        self.clientes=clientes
+        self.inventario=inventario
+        self.ventasT=ventasT
+        self.ventasL=ventasL
+        self.ventasN=ventasN
     def getClientes(self):
         return self.clientes
 
@@ -16,8 +19,33 @@ class Babilon:
     def setInv(self,inventario):
         self.inventario=inventario
 
+    def setVentasT(self,ventasT):
+        self.ventasT=ventasT
+    def getVentasT(self):
+        return self.ventasT
+
+    def setVentasL(self,ventasL):
+        self.ventasL=ventasL
+    def getVentasL(self):
+        return self.ventasL
+    def setVentasN(self,ventasN):
+        self.ventasN=ventasN
+    def getVentasN(self):
+        return self.ventasN
     def setClientes(self,clientes):
         self.clientes=clientes
+
+    def crear_venta_loc(self, numero, cliente, fecha, producto, valor):
+        venta=Venta(numero, cliente, fecha, producto, valor)
+        self.ventasL.append(venta)
+        self.ventasT.append(venta)
+        self.inventario.producto.cantidad -= venta.producto.cantidad
+
+    def crear_venta_nal(self, numero, cliente, fecha, producto, valor):
+        venta=Venta(numero, cliente, fecha, producto, valor)
+        self.ventasN.append(venta)
+        self.ventasT.append(venta)
+        self.inventario.producto.cantidad -= venta.producto.cantidad
 
     def agregar_producto(self, producto):
 
@@ -36,6 +64,9 @@ class Babilon:
                 else:
                     p.cantidad -= cantidad
                 return self.inventario
+
+    def agregar_venta(self,venta):
+        self.ventas.append(venta)
 
     def agregar_cliente(self, cliente):
         self.clientes.append(cliente)

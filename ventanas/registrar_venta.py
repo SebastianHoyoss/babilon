@@ -1,6 +1,8 @@
 import tkinter as tk
 from tkinter import Label, messagebox, ttk
 from src.babilon import Babilon
+from src.babilon import *
+from src.venta import Venta
 from src.cliente import Cliente
 from src.producto import Producto
 from src.tipo import Tipo
@@ -13,6 +15,9 @@ class RegistrarVentaWindow(tk.Toplevel):
         self.babilon = babilon
         self.clientes = self.babilon.getClientes()
         self.productos = self.babilon.getInventario()
+        self.ventasT= self.babilon.getVentasT()
+        self.ventasL= self.babilon.getVentasL()
+        self.ventasN= self.babilon.getVentasN()
         self.master = master
         self.title("Registrar Venta")
         self.geometry("700x500")
@@ -28,6 +33,7 @@ class RegistrarVentaWindow(tk.Toplevel):
         precio_var=tk.StringVar()
         cantidad_var=tk.StringVar()
         observacion_var=tk.StringVar()
+        ciudad_var=tk.StringVar()
 
         self.title("Registro de Pedidos")
         def seleccionar_cliente(event):
@@ -46,13 +52,17 @@ class RegistrarVentaWindow(tk.Toplevel):
 
         def agregar_pedido():
             cliente_seleccionado = combobox_cliente.get()
+            producto_seleccionado = combobox_producto.get()
             for cliente in self.clientes:
                 if cliente.nombre == cliente_seleccionado:
                     cliente.agregar_pedido(pedido_var.get())
                     print(f"Pedidos actuales de {cliente.nombre}: {cliente.pedidos}")
-        # Función de ejemplo para agregar detalle de pedido
-        def agregar_detalle():
-            print(f"Pedido agregado: {pedido_var.get()}, Producto: {producto_var.get()}")
+            
+            if ciudad_var.get().upper() == 'MEDELLIN':
+                self.babilon.agregar_venta_loc(pedido_var.get(), cliente_seleccionado, fecha_var.get(), producto_seleccionado, float(precio_var.get()))
+            else:
+                self.babilon.agregar_venta_nal(pedido_var.get(), cliente_seleccionado, fecha_var.get(), producto_seleccionado, float(precio_var.get()))
+            self.destroy()
 
         # Crear etiquetas y campos de entrada
         tk.Label(self, text="Pedido:").grid(row=0, column=0,sticky='nsew')
@@ -77,7 +87,8 @@ class RegistrarVentaWindow(tk.Toplevel):
         tk.Entry(self, textvariable=direccion_cll_var, width=5).grid(row=4, column=1, sticky='nsew')
 
         # Botón para agregar detalles del pedido
-        tk.Button(self, text="Agregar Detalle Pedido", command=agregar_detalle).grid(row=6, column=0, columnspan=2,sticky='nsew')
+        tk.Label(self, text="Ciudad:").grid(row=6, column=0,sticky='nsew')
+        tk.Entry(self, textvariable=ciudad_var).grid(row=6, column=1,sticky='nsew')
 
         # Sección de detalles del pedido
         tk.Label(self, text="Producto:").grid(row=7, column=0,sticky='nsew')
