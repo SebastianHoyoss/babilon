@@ -13,6 +13,7 @@ from ventanas.eliminar_producto import *
 from ventanas.mostrar_cliente import *
 from ventanas.mostrar_producto import *
 from ventanas.registrar_venta import *
+from ventanas.actualizar_precios import *
 
 user="admin"
 password="admin"
@@ -66,6 +67,10 @@ def hora():
     serializar(babilon)
     root.after(1000,hora)
 
+def abrir_ventana_actualizar_precios():
+    actualizarPreciosWindow(root, babilon)
+
+
 babilon=deserializar()
 clientes=babilon.getClientes()
 inventario=babilon.getInventario()
@@ -94,6 +99,7 @@ if __name__ == "__main__":
     boton_func5=tk.Button(frame1,text="Eliminar Producto",command=abrir_ventana_eliminar_producto)
     boton_func6=tk.Button(frame1,text="Consultar Inventario",command=abrir_ventana_mostrar_productos)
     boton_func7=tk.Button(frame1,text="Registrar Venta",command=abrir_ventana_registrar_venta)
+    boton_func8=tk.Button(frame1,text="Actuializar Precios",command=abrir_ventana_actualizar_precios)
     boton_salir=tk.Button(frame1,text="Salir",command=salir)
 
     etiqueta.grid(row=0,column=0,padx=0,pady=10,sticky="nsew")
@@ -104,6 +110,7 @@ if __name__ == "__main__":
     boton_func5.grid(row=5,column=0,padx=0,pady=10,sticky="nsew")
     boton_func6.grid(row=6,column=0,padx=0,pady=10,sticky="nsew")
     boton_func7.grid(row=7,column=0,padx=0,pady=10,sticky="nsew")
+    boton_func8.grid(row=7,column=0,padx=0,pady=10,sticky="nsew")
     boton_salir.grid(row=8,column=0,padx=0,pady=10,sticky="nsew")
 
     frame1.configure(width=200,height=500,bg="azure",bd=5)
@@ -112,7 +119,7 @@ if __name__ == "__main__":
     root.withdraw()
     ventana_login=tk.Tk()
     ventana_login.title("Iniciar Sesión")
-    ventana_login.geometry("250x200")
+    ventana_login.geometry("300x200")
     tk.Label(ventana_login, text="Usuario").grid(row=0, column=0, padx=10, pady=10)
     entry_usuario = tk.Entry(ventana_login)
     entry_usuario.grid(row=0, column=1, padx=10, pady=10)

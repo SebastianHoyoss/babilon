@@ -1,16 +1,13 @@
 import tkinter as tk
-from tkinter import Label, messagebox, ttk
-from src.babilon import Babilon
 from src.cliente import Cliente
-from src.producto import Producto
-from src.tipo import Tipo
 from excepciones.excepciones import *
+
 # Clase para la ventana Toplevel (Crear Cliente)
 class ClienteWindow(tk.Toplevel):
     def __init__(self, master=None, babilon=None):
         super().__init__(master)
         self.title("Añadir Cliente")
-        self.geometry("250x200")
+        self.geometry("300x200")
         self.configure(bg="azure")
         self.resizable(False,False)
         self.babilon = babilon
