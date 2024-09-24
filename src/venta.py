@@ -1,7 +1,9 @@
 class Venta:
-    def __init__(self, numero, cliente, fecha, pedido, valor_total):
+    def __init__(self, numero, cliente, fecha, producto, valor_total):
         self.numero = numero
         self.cliente = cliente
         self.fecha = fecha
-        self.pedido = pedido
+        self.producto = producto
         self.valor_total = valor_total
+
+    
