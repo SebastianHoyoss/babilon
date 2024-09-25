@@ -22,6 +22,7 @@ class CrearClienteWindow(tk.Toplevel):
         contenedor = tk.Frame(self)
         contenedor.pack(expand=True, fill='both')
         
+        #Campo para el ID
         tk.Label(contenedor, text="ID").grid(row=0, column=0, padx=10, pady=5, sticky="e")
         self.entry_id = tk.Entry(contenedor, state='normal', width=20) 
         self.entry_id.grid(row=0, column=1, padx=10, pady=5, sticky="w")
@@ -60,4 +61,4 @@ class CrearClienteWindow(tk.Toplevel):
             # Mostrar un messagebox con la información del producto creado
             messagebox.showinfo("Éxito", f"Cliente creado:\nID: {cliente.id}\nNombre: {cliente.nombre}\nDirección: {cliente.direccion}\nTeléfono: {cliente.telefono}")
             self.destroy()  # Cierra la ventana después de crear el producto
-            # Actualizar la lista en la ventana de mostrar productos, si está abierta
+            

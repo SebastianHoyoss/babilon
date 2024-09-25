@@ -9,10 +9,11 @@ from excepciones.excepciones import *
 from ventanas.crear_cliente import *
 from ventanas.crear_producto import *
 from ventanas.eliminar_producto import *
-from ventanas.mostrar_producto import *
+from ventanas.gestion_inv import *
 from ventanas.registrar_venta import *
 from ventanas.actualizar_precios import *
 from ventanas.gestion_cliente import *
+from ventanas.respaldo_Actualizar_precios import *
 
 user="admin"
 password="admin"
@@ -32,23 +33,39 @@ def validar_login():
     else:
         messagebox.showinfo("Error", "Credenciales incorrectas")
 
+#Centrar una ventana TopLevel
+def center_window(window, width, height):
+    # Obtener las dimensiones de la pantalla
+    screen_width = window.winfo_screenwidth()
+    screen_height = window.winfo_screenheight()
+    
+    # Calcular las coordenadas para centrar la ventana
+    x = (screen_width // 2) - (width // 2)
+    y = (screen_height // 2) - (height // 2)
+    
+    # Establecer la geometría de la ventana
+    window.geometry(f"{width}x{height}+{x}+{y}")
 
 # Función para abrir la ventana Toplevel (Crear Cliente)
 def abrir_ventana_clientes():
-    ClienteWindow(root, babilon)
+    # Limpiar el frame2
+    for widget in frame2.winfo_children():
+        widget.destroy()
+    
+    # Crear y agregar el ClienteWindow al frame2
+    cliente_window = ClienteWindow(frame2, babilon)
+    cliente_window.pack(fill='both', expand=True)
 
 # Función para abrir la ventana Toplevel (Crear Producto)
 def abrir_ventana_producto():
-    ProductoWindow(root, babilon)
+    # Limpiar el frame2
+    for widget in frame2.winfo_children():
+        widget.destroy()
+    
+    # Crear y agregar el ProductoWindow al frame2
+    producto_window = ProductoWindow(frame2, babilon)
+    producto_window.pack(fill='both', expand=True)
 
-# Función para abrir la ventana Toplevel (Mostrar Productos)
-def abrir_ventana_mostrar_productos():
-    global mostrar_productos_window
-    mostrar_productos_window = MostrarProductosWindow(root, babilon)
-
-# Función para abrir la ventana Toplevel (Eliminar Producto)
-def abrir_ventana_eliminar_producto():
-    EliminarProductoWindow(root, babilon)
 
 def abrir_ventana_registrar_venta():
     RegistrarVentaWindow(root, babilon)
@@ -94,52 +111,64 @@ if __name__ == "__main__":
     root = tk.Tk()
     root.iconbitmap("assets/babilon.ico.ico")
     root.title("Babiloon Shoes")
-    root.geometry("750x500")
+    root.geometry("850x500")
     root.resizable(False,False)
-    frame1=tk.Frame(root,padx=10,pady=20,bd=1,relief="solid")
-    frame2=tk.Frame(root,padx=10,pady=20,bd=1,relief="solid")
+    # Configura las filas y columnas para que ocupen el espacio
+    root.rowconfigure(1, weight=1)  # Permitir que la fila 1 expanda
+    root.columnconfigure(0, weight=0)  # La columna 0 (frame1) no expande
+    root.columnconfigure(1, weight=1)  # La columna 1 (frame2) expande
+
+    frame1 = tk.Frame(root, padx=10, pady=20, bd=1, relief="solid", bg="azure")
+    frame2 = tk.Frame(root, padx=10, pady=20, bd=1, relief="solid", bg="light blue")
 
     frame1.grid(row=1, column=0, sticky="nsew")
-    frame1.pack_propagate(False)
-    frame2.grid(row=1,column=1,sticky="nsew")
-    frame2.pack_propagate(False)
+    frame2.grid(row=1, column=1, sticky="nsew")
 
+    # Elimina la restricción de tamaño y permite que el frame2 ocupe todo el espacio
+    frame1.pack_propagate(False)
+    frame2.pack_propagate(True)  # Permitir que frame2 se ajuste al contenido
     etiqueta=tk.Label(frame1,text="Hora")
     hora()
 
     boton_func1=tk.Button(frame1,text="Gestionar Clientes",command=abrir_ventana_clientes)
-    boton_func4=tk.Button(frame1,text="Añadir Producto",command=abrir_ventana_producto)
-    boton_func5=tk.Button(frame1,text="Eliminar Producto",command=abrir_ventana_eliminar_producto)
-    boton_func6=tk.Button(frame1,text="Consultar Inventario",command=abrir_ventana_mostrar_productos)
-    boton_func7=tk.Button(frame1,text="Registrar Venta",command=abrir_ventana_registrar_venta)
-    boton_func8=tk.Button(frame1,text="Actualizar Precios",command=abrir_ventana_actualizar_precios)
+    boton_func2=tk.Button(frame1,text="Gestionar Inventario",command=abrir_ventana_producto)
+    boton_func3=tk.Button(frame1,text="Registrar Venta",command=abrir_ventana_registrar_venta)
     boton_salir=tk.Button(frame1,text="Salir",command=salir)
 
     etiqueta.grid(row=0,column=0,padx=0,pady=10,sticky="nsew")
     boton_func1.grid(row=1,column=0,padx=0,pady=10,sticky="nsew")
-    boton_func4.grid(row=2,column=0,padx=0,pady=10,sticky="nsew")
-    boton_func5.grid(row=3,column=0,padx=0,pady=10,sticky="nsew")
-    boton_func6.grid(row=4,column=0,padx=0,pady=10,sticky="nsew")
-    boton_func7.grid(row=5,column=0,padx=0,pady=10,sticky="nsew")
-    boton_func8.grid(row=6,column=0,padx=0,pady=10,sticky="nsew")
+    boton_func2.grid(row=2,column=0,padx=0,pady=10,sticky="nsew")
+    boton_func3.grid(row=5,column=0,padx=0,pady=10,sticky="nsew")
     boton_salir.grid(row=7,column=0,padx=0,pady=10,sticky="nsew")
 
-    frame1.configure(width=200,height=500,bg="azure",bd=5)
-    frame2.configure(width=670,height=500,bg="light blue",bd=5)
-
-    root.withdraw()
-    ventana_login=tk.Tk()
+    # Ventana de Login
+    ventana_login = tk.Toplevel(root)
     ventana_login.title("Iniciar Sesión")
-    ventana_login.geometry("300x200")
-    tk.Label(ventana_login, text="Usuario").grid(row=0, column=0, padx=10, pady=10)
-    entry_usuario = tk.Entry(ventana_login)
+    center_window(ventana_login, 300, 200)
+
+    # Crear frame para centrar etiquetas y entradas
+    frame_login = tk.Frame(ventana_login)
+    frame_login.pack(pady=20)
+
+    tk.Label(frame_login, text="Usuario:").grid(row=0, column=0, padx=10, pady=10)
+    entry_usuario = tk.Entry(frame_login)
     entry_usuario.grid(row=0, column=1, padx=10, pady=10)
 
-    tk.Label(ventana_login, text="Contraseña").grid(row=1, column=0, padx=10, pady=10)
-    entry_contraseña = tk.Entry(ventana_login, show="*")  # 'show="*"' oculta la contraseña
+    tk.Label(frame_login, text="Contraseña:").grid(row=1, column=0, padx=10, pady=10)
+    entry_contraseña = tk.Entry(frame_login, show="*")
     entry_contraseña.grid(row=1, column=1, padx=10, pady=10)
 
     # Botón de login
-    boton_login = tk.Button(ventana_login, text="Iniciar sesión", command=validar_login)
+    boton_login = tk.Button(frame_login, text="Iniciar sesión", command=validar_login)
     boton_login.grid(row=2, column=0, columnspan=2, pady=10)
+
+    # Cerrar la ventana de login correctamente
+    def cerrar_ventana_login():
+        ventana_login.destroy()
+        root.quit()  # Cierra la aplicación
+
+    ventana_login.protocol("WM_DELETE_WINDOW", cerrar_ventana_login)
+
+    # Ocultar la ventana principal al inicio
+    root.withdraw()
     ventana_login.mainloop()

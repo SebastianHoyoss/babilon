@@ -11,7 +11,7 @@ from excepciones.excepciones import *
 import tkinter as tk
 from tkinter import ttk
 
-class MostrarProductosWindow(tk.Toplevel):
+class ProductosWindow(tk.Toplevel):
     def __init__(self, master=None, babilon=None):
         super().__init__(master)
         self.title("Productos")
@@ -19,9 +19,12 @@ class MostrarProductosWindow(tk.Toplevel):
         self.configure(bg="azure")
         self.resizable(False, False)
         self.babilon = babilon
+        self.inventario=self.babilon.getInventario()
+        self.ids_disponibles = []
 
         # Diccionario para rastrear el estado de ordenación de cada columna
         self.orden_actual = {
+            "ID": True,
             "Nombre": True,
             "Talla": True,
             "Precio": True,

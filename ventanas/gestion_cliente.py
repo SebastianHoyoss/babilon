@@ -10,17 +10,20 @@ from ventanas.crear_cliente import CrearClienteWindow
 
 
 # Clase para la ventana Toplevel
-class ClienteWindow(tk.Toplevel):
+class ClienteWindow(tk.Frame):
     def __init__(self, master=None, babilon=None):
-        super().__init__(master)
-        self.title("Gestionar Cliente")
-        self.geometry("400x300")
+        super().__init__(master)  
         self.configure(bg="azure")
-        self.resizable(False,False)
         self.clientes=babilon.getClientes()
         self.babilon = babilon
         self.ids_disponibles = []
         
+        # Establecer un tamaño mínimo para el frame
+        self.update_idletasks()  # Actualiza los tamaños requeridos antes de usar geometry
+        self.pack_propagate(False)  # Permite que el frame tenga un tamaño fijo
+        self.config(width=400, height=300)  # Ajusta según sea necesario
+        
+        tk.Label(self, text="Gestión de Clientes", bg="azure").pack()
         # Para almacenar el estado de la ordenación (ascendente o descendente) por cada columna
         self.orden_actual = {"ID": True, "Nombre": True, "Dirección": True, "Teléfono": True}
         
@@ -42,7 +45,7 @@ class ClienteWindow(tk.Toplevel):
         self.tree.column("Dirección", width=50, anchor="w")
         self.tree.column("Teléfono", width=70, anchor="e")
 
-        # Botónnes 
+        # Botónes 
         boton_crear = tk.Button(contenedor, text="Añadir Cliente", command=self.crear_cliente)
         boton_crear.pack(side=tk.LEFT, padx=5, pady=5)
         boton_eliminar = tk.Button(contenedor, text="Eliminar Cliente", command=self.eliminar_cliente)
@@ -104,17 +107,23 @@ class ClienteWindow(tk.Toplevel):
         
         id = selected_item[0]
         
-        # Buscar y eliminar el cliente
-        self.clientes = [p for p in self.clientes if p.id != id]
-        self.babilon.setClientes(self.clientes)
+        # Preguntar confirmación antes de eliminar
+        confirmacion = messagebox.askyesno("Confirmación", f"¿Estás seguro de que deseas eliminar al cliente con ID '{id}'?")
         
-        self.ids_disponibles.append(id)
-        
-        
-        messagebox.showinfo("Éxito", f"Cliente con ID '{id}' eliminado correctamente.")
-        self.actualizar_lista()
+        if confirmacion:  # Si el usuario confirmó la eliminación
+            # Buscar y eliminar el cliente
+            self.clientes = [p for p in self.clientes if p.id != id]
+            self.babilon.setClientes(self.clientes)
+            self.ids_disponibles.append(id)
+            
+            messagebox.showinfo("Éxito", f"Cliente con ID {id} eliminado correctamente.")
+            self.actualizar_lista()
+        else:
+            messagebox.showinfo("Cancelado", "Eliminación cancelada.")
+
         
     def crear_cliente(self):
+        self.actualizar_lista()
         nuevo_id = self.obtener_id_libre()
         # Abrir la ventana CrearClienteWindow pasando el master y el objeto babilon
         nueva_ventana = CrearClienteWindow(self, babilon=self.babilon, id=nuevo_id)
@@ -122,7 +131,16 @@ class ClienteWindow(tk.Toplevel):
         self.actualizar_lista()
     
     def obtener_id_libre(self):
+        # Si hay IDs eliminadas, reutilizarlas primero
         if self.ids_disponibles:
-            return self.ids_disponibles.pop(0)  # Devuelve el primer ID disponible
-        else:
-            return str(len(self.clientes) + 1).zfill(3)  # Genera un nuevo ID
+            self.ids_disponibles.sort()  # Asegurarse de que estén en orden
+            return self.ids_disponibles.pop(0)  # Reutilizar la primera ID disponible
+        
+        # Si no hay IDs eliminadas, usar el enfoque secuencial
+        nuevo_id = 1
+        while True:
+            id_str = str(nuevo_id).zfill(3)  # Convertir el número a formato '001', '002', etc.
+            if not any(cliente.id == id_str for cliente in self.clientes):
+                return id_str  # Si no está en uso, devolverla
+            nuevo_id += 1  # Continuar con la siguiente ID
+
