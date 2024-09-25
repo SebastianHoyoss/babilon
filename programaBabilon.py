@@ -15,6 +15,7 @@ from ventanas.actualizar_precios import *
 from ventanas.gestion_cliente import *
 from ventanas.respaldo_Actualizar_precios import *
 from ventanas.generar_balaces import *
+from PIL import Image, ImageTk
 
 user="admin"
 password="admin"
@@ -94,12 +95,17 @@ ventasT=babilon.getVentasT()
 ventasL=babilon.getVentasL()
 ventasN=babilon.getVentasN()
 
+
+
+
 if __name__ == "__main__":
     root = tk.Tk()
+    center_window(root, 300, 200)
     root.iconbitmap("assets/babilon.ico.ico")
     root.title("Babiloon Shoes")
     root.geometry("850x500")
     root.resizable(False,False)
+    
     # Configura las filas y columnas para que ocupen el espacio
     root.rowconfigure(1, weight=1)  # Permitir que la fila 1 expanda
     root.columnconfigure(0, weight=0)  # La columna 0 (frame1) no expande
@@ -129,7 +135,11 @@ if __name__ == "__main__":
     boton_func3.grid(row=5,column=0,padx=0,pady=10,sticky="nsew")
     boton_func4.grid(row=6,column=0,padx=0,pady=10,sticky="nsew")
     boton_salir.grid(row=7,column=0,padx=0,pady=10,sticky="nsew")
-
+    image=Image.open("assets/babilonLogo.jpg")
+    image = image.resize((300, 300))
+    photo = ImageTk.PhotoImage(image)
+    logo=tk.Label(frame2,image=photo)
+    logo.pack(expand=True,anchor="center")
     # Ventana de Login
     ventana_login = tk.Toplevel(root)
     ventana_login.title("Iniciar Sesión")
