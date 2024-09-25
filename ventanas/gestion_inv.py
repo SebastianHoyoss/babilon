@@ -23,7 +23,7 @@ class ProductoWindow(tk.Frame):
         self.pack_propagate(False)  # Permite que el frame tenga un tamaño fijo
         self.config(width=400, height=300)  # Ajusta según sea necesario
         
-        tk.Label(self, text="Gestión de Clientes", bg="azure").pack()
+        tk.Label(self, text="Gestión de Inventario", bg="azure").pack()
         # Diccionario para rastrear el estado de ordenación de cada columna
         self.orden_actual = {
             "ID": True,
@@ -133,7 +133,7 @@ class ProductoWindow(tk.Frame):
         nuevo_id = 1
         while True:
             id_str = str(nuevo_id).zfill(3)  # Convertir el número a formato '001', '002', etc.
-            if not any(cliente.id == id_str for cliente in self.clientes):
+            if not any(producto.id == id_str for producto in self.inventario):
                 return id_str  # Si no está en uso, devolverla
             nuevo_id += 1  # Continuar con la siguiente ID
 
