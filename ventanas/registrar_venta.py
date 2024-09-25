@@ -1,6 +1,10 @@
 import tkinter as tk
 from tkinter import ttk
 from tkcalendar import DateEntry
+from src.babilon import *
+from src.venta import Venta
+from src.cliente import Cliente
+from src.producto import Producto
 
 class RegistrarVentaWindow(tk.Frame):
     def __init__(self, master=None, babilon=None):
@@ -9,6 +13,9 @@ class RegistrarVentaWindow(tk.Frame):
         self.clientes = self.babilon.getClientes()
         self.productos = self.babilon.getInventario()
         self.master = master
+        self.ventasT= self.babilon.getVentasT()
+        self.ventasL= self.babilon.getVentasL()
+        self.ventasN= self.babilon.getVentasN()
         
         # Establecer un color de fondo
         self.config(bg="#f0f0f0")
@@ -51,7 +58,27 @@ class RegistrarVentaWindow(tk.Frame):
                     precio_var.set(producto.precio)
 
         def agregar_pedido():
-            # Lógica para agregar pedido
+            cliente_seleccionado = combobox_cliente.get()
+            for cliente in self.clientes:
+                if cliente.nombre == cliente_seleccionado:
+                    cliente_obj = cliente
+            producto_seleccionado = combobox_producto.get()
+            for producto in self.productos:
+                if producto.nombre == producto_seleccionado:
+                    producto_obj = producto
+
+            if ciudad_var.get().upper() == 'MEDELLIN':
+                venta=Venta(pedido_var.get(), cliente_obj, fecha_var.get(), producto_obj, float(precio_var.get())*float(cantidad_var.get()))
+                self.babilon.crear_venta_loc(pedido_var.get(), cliente_obj, fecha_var.get(), producto_obj, float(precio_var.get())*float(cantidad_var.get()),int(cantidad_var.get()))
+                for cliente in self.clientes:
+                    if cliente.nombre == cliente_seleccionado:
+                        cliente.agregar_pedido(venta)
+            else:
+                venta=Venta(pedido_var.get(), cliente_obj, fecha_var.get(), producto_obj, float(precio_var.get())*float(cantidad_var.get()))
+                self.babilon.crear_venta_nal(pedido_var.get(), cliente_obj, fecha_var.get(), producto_obj, float(precio_var.get())*float(cantidad_var.get()),int(cantidad_var.get()))
+                for cliente in self.clientes:
+                    if cliente.nombre == cliente_seleccionado:
+                        cliente.agregar_pedido(venta)
             self.destroy()
 
         # Crear etiquetas y campos de entrada con espacio
