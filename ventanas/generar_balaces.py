@@ -1,7 +1,7 @@
 import tkinter as tk
 from tkinter import ttk, messagebox
 from datetime import datetime
-
+from tkcalendar import DateEntry
 class generarBalancesWindows(tk.Toplevel):
     def __init__(self, master=None, babilon=None):
         super().__init__(master)
@@ -9,17 +9,17 @@ class generarBalancesWindows(tk.Toplevel):
         self.geometry("400x300")
         self.configure(bg="azure")
         self.resizable(False, False)
-
-        self.babilon = babilon 
-
+        self.babilon = babilon
+        self.fecha_inicio_var = tk.StringVar()
+        self.fecha_fin_var = tk.StringVar()
         # Etiquetas y entradas para las fechas
         tk.Label(self, text="Fecha Inicio (Dia/Mes/Año):", bg="azure").pack(pady=5)
-        self.entry_fecha_inicio = tk.Entry(self)
-        self.entry_fecha_inicio.pack(pady=5)
+        calendarioInicio = DateEntry(self, textvariable=self.fecha_inicio_var, date_pattern='dd/mm/yyyy', width=15)
+        calendarioInicio.pack(pady=5)
 
         tk.Label(self, text="Fecha Fin (Dia/Mes/Año):", bg="azure").pack(pady=5)
-        self.entry_fecha_fin = tk.Entry(self)
-        self.entry_fecha_fin.pack(pady=5)
+        calendarioFin = DateEntry(self, textvariable=self.fecha_fin_var, date_pattern='dd/mm/yyyy', width=15)
+        calendarioFin.pack(pady=5)
 
         # Combobox para seleccionar tipo de venta
         tk.Label(self, text="Selecciona el tipo de venta:", bg="azure").pack(pady=5)
@@ -31,8 +31,8 @@ class generarBalancesWindows(tk.Toplevel):
 
     def generar_balance(self):
         # Obtener fechas desde las entradas
-        fecha_inicio_str = self.entry_fecha_inicio.get()
-        fecha_fin_str = self.entry_fecha_fin.get()
+        fecha_inicio_str = self.fecha_inicio_var.get()
+        fecha_fin_str = self.fecha_fin_var.get()
 
         # Convertir las fechas al formato datetime
         try:
