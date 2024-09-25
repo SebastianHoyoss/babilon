@@ -75,6 +75,31 @@ def abrir_ventana_actualizar_precios():
 babilon=deserializar()
 clientes=babilon.getClientes()
 inventario=babilon.getInventario()
+ventasT=babilon.getVentasT()
+ventasL=babilon.getVentasL()
+ventasN=babilon.getVentasN()
+
+print("VENTAS TOTALES")
+for venta in ventasT:
+    print(venta.numero)
+    print(venta.cliente.nombre)
+    print(venta.fecha)
+    print(venta.producto.nombre)
+    print(venta.valor_total)
+print("VENTAS LOCALES")
+for venta in ventasL:
+    print(venta.numero)
+    print(venta.cliente.nombre)
+    print(venta.fecha)
+    print(venta.producto.nombre)
+    print(venta.valor_total)
+print("VENTAS NACIONALES")
+for venta in ventasN:
+    print(venta.numero)
+    print(venta.cliente.nombre)
+    print(venta.fecha)
+    print(venta.producto.nombre)
+    print(venta.valor_total)
 
 if __name__ == "__main__":
     root = tk.Tk()

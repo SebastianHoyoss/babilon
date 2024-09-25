@@ -52,16 +52,22 @@ class RegistrarVentaWindow(tk.Toplevel):
 
         def agregar_pedido():
             cliente_seleccionado = combobox_cliente.get()
+            for cliente in self.clientes:
+                if cliente.nombre == cliente_seleccionado:
+                    cliente_obj = cliente
             producto_seleccionado = combobox_producto.get()
+            for producto in self.productos:
+                if producto.nombre == producto_seleccionado:
+                    producto_obj = producto
             for cliente in self.clientes:
                 if cliente.nombre == cliente_seleccionado:
                     cliente.agregar_pedido(pedido_var.get())
                     print(f"Pedidos actuales de {cliente.nombre}: {cliente.pedidos}")
             
             if ciudad_var.get().upper() == 'MEDELLIN':
-                self.babilon.agregar_venta_loc(pedido_var.get(), cliente_seleccionado, fecha_var.get(), producto_seleccionado, float(precio_var.get()))
+                self.babilon.crear_venta_loc(pedido_var.get(), cliente_obj, fecha_var.get(), producto_obj, float(precio_var.get())*float(cantidad_var.get()),int(cantidad_var.get()))
             else:
-                self.babilon.agregar_venta_nal(pedido_var.get(), cliente_seleccionado, fecha_var.get(), producto_seleccionado, float(precio_var.get()))
+                self.babilon.crear_venta_nal(pedido_var.get(), cliente_obj, fecha_var.get(), producto_obj, float(precio_var.get())*float(cantidad_var.get()),int(cantidad_var.get()))
             self.destroy()
 
         # Crear etiquetas y campos de entrada

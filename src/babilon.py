@@ -35,17 +35,21 @@ class Babilon:
     def setClientes(self,clientes):
         self.clientes=clientes
 
-    def crear_venta_loc(self, numero, cliente, fecha, producto, valor):
+    def eliminar_cantidad(self, producto, cantidad):
+        for p in self.inventario:
+            if p == producto:
+                p.cantidad -= cantidad
+    def crear_venta_loc(self, numero, cliente, fecha, producto, valor, cantidad):
         venta=Venta(numero, cliente, fecha, producto, valor)
         self.ventasL.append(venta)
         self.ventasT.append(venta)
-        self.inventario.producto.cantidad -= venta.producto.cantidad
+        self.eliminar_cantidad(producto,cantidad)
 
-    def crear_venta_nal(self, numero, cliente, fecha, producto, valor):
+    def crear_venta_nal(self, numero, cliente, fecha, producto, valor, cantidad):
         venta=Venta(numero, cliente, fecha, producto, valor)
         self.ventasN.append(venta)
         self.ventasT.append(venta)
-        self.inventario.producto.cantidad -= venta.producto.cantidad
+        self.eliminar_cantidad(producto,cantidad)
 
     def agregar_producto(self, producto):
 
