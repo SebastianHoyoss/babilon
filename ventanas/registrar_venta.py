@@ -79,14 +79,14 @@ class RegistrarVentaWindow(tk.Frame):
                     producto_obj = producto
 
             if ciudad_var.get().upper() == 'MEDELLIN' or ciudad_var.get().upper() == 'MEDELLÍN':
-                venta=Venta(pedido_var.get(), cliente_obj, fecha_var.get(), producto_obj, float(precio_var.get())*float(cantidad_var.get()))
-                self.babilon.crear_venta_loc(pedido_var.get(), cliente_obj, fecha_var.get(), producto_obj, float(precio_var.get())*float(cantidad_var.get()),int(cantidad_var.get()))
+                venta=Venta(pedido_var.get(), cliente_obj, fecha_var.get(), producto_obj, float(precio_var.get())*float(cantidad_var.get()),"MEDELLIN")
+                self.babilon.crear_venta_loc(pedido_var.get(), cliente_obj, fecha_var.get(), producto_obj, float(precio_var.get())*float(cantidad_var.get()),int(cantidad_var.get()),"MEDELLIN")
                 for cliente in self.clientes:
                     if cliente.nombre == cliente_seleccionado:
                         cliente.agregar_pedido(venta)
             else:
-                venta=Venta(pedido_var.get(), cliente_obj, fecha_var.get(), producto_obj, float(precio_var.get())*float(cantidad_var.get()))
-                self.babilon.crear_venta_nal(pedido_var.get(), cliente_obj, fecha_var.get(), producto_obj, float(precio_var.get())*float(cantidad_var.get()),int(cantidad_var.get()))
+                venta=Venta(pedido_var.get(), cliente_obj, fecha_var.get(), producto_obj, float(precio_var.get())*float(cantidad_var.get()),ciudad_var.get().upper())
+                self.babilon.crear_venta_nal(pedido_var.get(), cliente_obj, fecha_var.get(), producto_obj, float(precio_var.get())*float(cantidad_var.get()),int(cantidad_var.get()),ciudad_var.get().upper())
                 for cliente in self.clientes:
                     if cliente.nombre == cliente_seleccionado:
                         cliente.agregar_pedido(venta)

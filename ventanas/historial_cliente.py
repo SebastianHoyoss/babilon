@@ -31,7 +31,7 @@ class HistorialCliente(tk.Toplevel):
                 pedido.fecha,
                 pedido.producto.nombre,
                 pedido.valor_total,
-                'Local' if pedido.cliente.direccion == 'Medellín' else 'Nacional'  # Cambia esto según tu lógica para definir localidad
+                'Local' if pedido.localidad == 'MEDELLIN' else 'Nacional'  # Cambia esto según tu lógica para definir localidad
             ))
 
 
