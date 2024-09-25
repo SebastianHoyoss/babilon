@@ -19,8 +19,6 @@ from PIL import Image, ImageTk
 
 user="admin"
 password="admin"
-userE="vendedor"
-passwordE="vendedor"
 def salir():
     serializar(babilon)
     exit()
@@ -30,14 +28,17 @@ def validar_login():
     usuario = entry_usuario.get()
     contra = entry_contraseña.get()
 
-    if (usuario==user and contra==password):
+    if usuario == user and contra == password:  # Si es admin
         messagebox.showinfo("Bienvenido", f"Se ha iniciado sesión correctamente!")
         ventana_login.destroy()
         root.deiconify()
-    elif (usuario==userE and contra==passwordE):
-        messagebox.showinfo("Bienvenido", f"Se ha iniciado sesión correctamente!")
+        mostrar_funcionalidades_admin()
+
+    elif usuario == "empleado" and contra == "empleado":  # Si es employe
+        messagebox.showinfo("Bienvenido", f"Se ha iniciado sesión como empleado")
         ventana_login.destroy()
         root.deiconify()
+        mostrar_funcionalidades_empleado()
     else:
         messagebox.showinfo("Error", "Credenciales incorrectas")
 
@@ -101,6 +102,20 @@ ventasT=babilon.getVentasT()
 ventasL=babilon.getVentasL()
 ventasN=babilon.getVentasN()
 
+def mostrar_funcionalidades_admin():
+    boton_func1.grid(row=1, column=0, padx=0, pady=10, sticky="nsew")
+    boton_func2.grid(row=2, column=0, padx=0, pady=10, sticky="nsew")
+    boton_func3.grid(row=5, column=0, padx=0, pady=10, sticky="nsew")
+    boton_func4.grid(row=6, column=0, padx=0, pady=10, sticky="nsew")
+    boton_salir.grid(row=7, column=0, padx=0, pady=10, sticky="nsew")
+
+# Mostrar solo la funcionalidad de registrar venta para empleados
+def mostrar_funcionalidades_empleado():
+    # Solo muestra el botón para registrar venta y el botón de salir
+    boton_func3.grid(row=1, column=0, padx=0, pady=10, sticky="nsew")
+    boton_salir.grid(row=2, column=0, padx=0, pady=10, sticky="nsew")
+
+
 
 if __name__ == "__main__":
     root = tk.Tk()
@@ -134,11 +149,6 @@ if __name__ == "__main__":
     boton_salir=tk.Button(frame1,text="Salir",command=salir)
 
     etiqueta.grid(row=0,column=0,padx=0,pady=10,sticky="nsew")
-    boton_func1.grid(row=1,column=0,padx=0,pady=10,sticky="nsew")
-    boton_func2.grid(row=2,column=0,padx=0,pady=10,sticky="nsew")
-    boton_func3.grid(row=5,column=0,padx=0,pady=10,sticky="nsew")
-    boton_func4.grid(row=6,column=0,padx=0,pady=10,sticky="nsew")
-    boton_salir.grid(row=7,column=0,padx=0,pady=10,sticky="nsew")
     image=Image.open("assets/babilonLogo.jpg")
     image = image.resize((300, 300))
     photo = ImageTk.PhotoImage(image)
