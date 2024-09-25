@@ -8,9 +8,7 @@ from baseDatos.serializacion import serializar, deserializar
 from excepciones.excepciones import *
 from ventanas.crear_cliente import *
 from ventanas.crear_producto import *
-from ventanas.eliminar_cliente import *
 from ventanas.eliminar_producto import *
-from ventanas.mostrar_cliente import *
 from ventanas.mostrar_producto import *
 from ventanas.registrar_venta import *
 from ventanas.actualizar_precios import *
