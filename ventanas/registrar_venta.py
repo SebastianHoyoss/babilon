@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import ttk
+from tkinter import messagebox
 from tkcalendar import DateEntry
 from src.babilon import *
 from src.venta import Venta
@@ -30,12 +31,12 @@ class RegistrarVentaWindow(tk.Frame):
 
         # Variables para almacenar datos
         pedido_var = tk.StringVar()
-        fecha_var = tk.StringVar()
-        nombre_var = tk.StringVar()
+        fecha_var = tk.StringVar() 
+        nombre_var = tk.StringVar() 
         telefono_var = tk.StringVar()
         direccion_cll_var = tk.StringVar()
-        producto_var = tk.StringVar()
-        precio_var = tk.StringVar()
+        producto_var = tk.StringVar() 
+        precio_var = tk.StringVar() 
         cantidad_var = tk.StringVar()
         ciudad_var = tk.StringVar()
         
@@ -56,6 +57,17 @@ class RegistrarVentaWindow(tk.Frame):
             for producto in self.productos:
                 if producto.nombre == producto_seleccionado:
                     precio_var.set(producto.precio)
+        
+        def limpiar_campos():
+            pedido_var.set("")
+            fecha_var.set("")
+            nombre_var.set("")
+            telefono_var.set("")
+            direccion_cll_var.set("")
+            producto_var.set("")
+            precio_var.set("")
+            cantidad_var.set("")
+            ciudad_var.set("")
 
         def agregar_pedido():
             cliente_seleccionado = combobox_cliente.get()
@@ -67,7 +79,7 @@ class RegistrarVentaWindow(tk.Frame):
                 if producto.nombre == producto_seleccionado:
                     producto_obj = producto
 
-            if ciudad_var.get().upper() == 'MEDELLIN':
+            if ciudad_var.get().upper() == 'MEDELLIN' or ciudad_var.get().upper() == 'MEDELLÍN':
                 venta=Venta(pedido_var.get(), cliente_obj, fecha_var.get(), producto_obj, float(precio_var.get())*float(cantidad_var.get()))
                 self.babilon.crear_venta_loc(pedido_var.get(), cliente_obj, fecha_var.get(), producto_obj, float(precio_var.get())*float(cantidad_var.get()),int(cantidad_var.get()))
                 for cliente in self.clientes:
@@ -79,7 +91,10 @@ class RegistrarVentaWindow(tk.Frame):
                 for cliente in self.clientes:
                     if cliente.nombre == cliente_seleccionado:
                         cliente.agregar_pedido(venta)
-            self.destroy()
+            messagebox.showinfo("Venta registrada", "La venta ha sido registrada exitosamente.")
+            limpiar_campos()
+
+                
 
         # Crear etiquetas y campos de entrada con espacio
         tk.Label(contenedor, text="Pedido:").grid(row=1, column=0, sticky='nsew', padx=5, pady=5)
@@ -120,4 +135,4 @@ class RegistrarVentaWindow(tk.Frame):
 
         # Botones de aceptar y cancelar
         tk.Button(contenedor, text="Aceptar", command=agregar_pedido).grid(row=10, column=1, sticky='nsew', padx=5, pady=5)
-        tk.Button(contenedor, text="Cancelar", command=self.destroy).grid(row=10, column=2, sticky='nsew', padx=5, pady=5)
+        
