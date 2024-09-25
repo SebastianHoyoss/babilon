@@ -19,12 +19,13 @@ from PIL import Image, ImageTk
 
 user="admin"
 password="admin"
+passwordE="empleado"
 def salir():
     serializar(babilon)
     exit()
 
 def validar_login():
-    global password
+    global password, passwordE
     usuario = entry_usuario.get()
     contra = entry_contraseña.get()
 
@@ -34,7 +35,7 @@ def validar_login():
         root.deiconify()
         mostrar_funcionalidades_admin()
 
-    elif usuario == "empleado" and contra == "empleado":  # Si es employe
+    elif usuario == "empleado" and contra == passwordE:  # Si es employe
         messagebox.showinfo("Bienvenido", f"Se ha iniciado sesión como empleado")
         ventana_login.destroy()
         root.deiconify()
