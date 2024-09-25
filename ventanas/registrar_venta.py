@@ -121,6 +121,12 @@ class RegistrarVentaWindow(tk.Frame):
         tk.Label(contenedor, text="Ciudad:").grid(row=6, column=0, sticky='nsew', padx=5, pady=5)
         tk.Entry(contenedor, textvariable=ciudad_var).grid(row=6, column=1, sticky='nsew', padx=5, pady=5)
 
+        checkbox1 = tk.Checkbutton(contenedor, text="Fisico")
+        checkbox1.grid(row=6, column=2, sticky='nsew', padx=5, pady=5)
+
+        checkbox2 = tk.Checkbutton(contenedor, text="Domicilio")
+        checkbox2.grid(row=6, column=3, sticky='nsew', padx=5, pady=5)
+
         # Sección de detalles del pedido
         tk.Label(contenedor, text="Producto:").grid(row=7, column=0, sticky='nsew', padx=5, pady=5)
         combobox_producto = ttk.Combobox(contenedor, textvariable=producto_var, values=[producto.nombre for producto in self.productos])
