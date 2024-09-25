@@ -60,7 +60,6 @@ class RegistrarVentaWindow(tk.Frame):
         
         def limpiar_campos():
             pedido_var.set("")
-            fecha_var.set("")
             nombre_var.set("")
             telefono_var.set("")
             direccion_cll_var.set("")

@@ -19,6 +19,8 @@ from PIL import Image, ImageTk
 
 user="admin"
 password="admin"
+userE="vendedor"
+passwordE="vendedor"
 def salir():
     serializar(babilon)
     exit()
@@ -28,7 +30,11 @@ def validar_login():
     usuario = entry_usuario.get()
     contra = entry_contraseña.get()
 
-    if usuario==user and contra==password:
+    if (usuario==user and contra==password):
+        messagebox.showinfo("Bienvenido", f"Se ha iniciado sesión correctamente!")
+        ventana_login.destroy()
+        root.deiconify()
+    elif (usuario==userE and contra==passwordE):
         messagebox.showinfo("Bienvenido", f"Se ha iniciado sesión correctamente!")
         ventana_login.destroy()
         root.deiconify()
@@ -94,8 +100,6 @@ inventario=babilon.getInventario()
 ventasT=babilon.getVentasT()
 ventasL=babilon.getVentasL()
 ventasN=babilon.getVentasN()
-
-
 
 
 if __name__ == "__main__":
