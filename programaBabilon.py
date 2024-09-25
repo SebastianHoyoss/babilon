@@ -39,15 +39,6 @@ def validar_login():
 def abrir_ventana_clientes():
     ClienteWindow(root, babilon)
 
-# Función para abrir la ventana Toplevel (Mostrar Cliente)
-def abrir_ventana_mostrar_clientes():
-    global mostrar_clientes_window
-    mostrar_clientes_window = MostrarClientesWindow(root, babilon)
-
-# Función para abrir la ventana Toplevel (Eliminar Cliente)
-def abrir_ventana_eliminar_clientes():
-    EliminarClienteWindow(root, babilon)
-
 # Función para abrir la ventana Toplevel (Crear Producto)
 def abrir_ventana_producto():
     ProductoWindow(root, babilon)
@@ -118,9 +109,7 @@ if __name__ == "__main__":
     etiqueta=tk.Label(frame1,text="Hora")
     hora()
 
-    boton_func1=tk.Button(frame1,text="Añadir Cliente",command=abrir_ventana_clientes)
-    boton_func2=tk.Button(frame1,text="Eliminar Cliente",command=abrir_ventana_eliminar_clientes)
-    boton_func3=tk.Button(frame1,text="Consultar Clientes",command=abrir_ventana_mostrar_clientes)
+    boton_func1=tk.Button(frame1,text="Gestionar Clientes",command=abrir_ventana_clientes)
     boton_func4=tk.Button(frame1,text="Añadir Producto",command=abrir_ventana_producto)
     boton_func5=tk.Button(frame1,text="Eliminar Producto",command=abrir_ventana_eliminar_producto)
     boton_func6=tk.Button(frame1,text="Consultar Inventario",command=abrir_ventana_mostrar_productos)
@@ -130,14 +119,12 @@ if __name__ == "__main__":
 
     etiqueta.grid(row=0,column=0,padx=0,pady=10,sticky="nsew")
     boton_func1.grid(row=1,column=0,padx=0,pady=10,sticky="nsew")
-    boton_func2.grid(row=2,column=0,padx=0,pady=10,sticky="nsew")
-    boton_func3.grid(row=3,column=0,padx=0,pady=10,sticky="nsew")
-    boton_func4.grid(row=4,column=0,padx=0,pady=10,sticky="nsew")
-    boton_func5.grid(row=5,column=0,padx=0,pady=10,sticky="nsew")
-    boton_func6.grid(row=6,column=0,padx=0,pady=10,sticky="nsew")
-    boton_func7.grid(row=7,column=0,padx=0,pady=10,sticky="nsew")
-    boton_func8.grid(row=8,column=0,padx=0,pady=10,sticky="nsew")
-    boton_salir.grid(row=9,column=0,padx=0,pady=10,sticky="nsew")
+    boton_func4.grid(row=2,column=0,padx=0,pady=10,sticky="nsew")
+    boton_func5.grid(row=3,column=0,padx=0,pady=10,sticky="nsew")
+    boton_func6.grid(row=4,column=0,padx=0,pady=10,sticky="nsew")
+    boton_func7.grid(row=5,column=0,padx=0,pady=10,sticky="nsew")
+    boton_func8.grid(row=6,column=0,padx=0,pady=10,sticky="nsew")
+    boton_salir.grid(row=7,column=0,padx=0,pady=10,sticky="nsew")
 
     frame1.configure(width=200,height=500,bg="azure",bd=5)
     frame2.configure(width=670,height=500,bg="light blue",bd=5)

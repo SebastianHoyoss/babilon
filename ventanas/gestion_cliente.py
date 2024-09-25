@@ -19,9 +19,10 @@ class ClienteWindow(tk.Toplevel):
         self.resizable(False,False)
         self.clientes=babilon.getClientes()
         self.babilon = babilon
+        self.ids_disponibles = []
         
         # Para almacenar el estado de la ordenación (ascendente o descendente) por cada columna
-        self.orden_actual = {"Nombre": True, "Dirección": True, "Teléfono": True}
+        self.orden_actual = {"ID": True, "Nombre": True, "Dirección": True, "Teléfono": True}
         
         # Crear el Frame que se centrará en la ventana
         contenedor = tk.Frame(self)
@@ -42,7 +43,7 @@ class ClienteWindow(tk.Toplevel):
         self.tree.column("Teléfono", width=70, anchor="e")
 
         # Botónnes 
-        boton_crear = tk.Button(contenedor, text="Crear Cliente", command=self.crear_cliente)
+        boton_crear = tk.Button(contenedor, text="Añadir Cliente", command=self.crear_cliente)
         boton_crear.pack(side=tk.LEFT, padx=5, pady=5)
         boton_eliminar = tk.Button(contenedor, text="Eliminar Cliente", command=self.eliminar_cliente)
         boton_eliminar.pack(side=tk.LEFT, padx=5, pady=5)
@@ -51,8 +52,6 @@ class ClienteWindow(tk.Toplevel):
         
         # Rellenar el Treeview con los clientes
         self.actualizar_lista()
-        
-        self.actualizar_periodicamente()
 
     def actualizar_lista(self):
         # Limpiar la vista antes de actualizar
@@ -62,12 +61,6 @@ class ClienteWindow(tk.Toplevel):
         # Añadir los productos a la vista
         for cliente in self.clientes:
             self.tree.insert("", "end", iid=cliente.id, values=(cliente.id, cliente.nombre, cliente.direccion, cliente.telefono))
-    
-    def actualizar_periodicamente(self):
-        # Actualizar la lista de clientes periódicamente
-        self.actualizar_lista()
-        # Volver a llamar a esta función después de 1000 ms (1 segundo)
-        self.after(1000, self.actualizar_periodicamente)
         
     def ordenar_columnas(self, columna):
         # Mapeo entre los nombres de las columnas y los atributos del cliente
@@ -108,18 +101,28 @@ class ClienteWindow(tk.Toplevel):
         if not selected_item:
             messagebox.showwarning("Advertencia", "Por favor, seleccione un cliente para eliminar.")
             return
-
-        item_values = self.tree.item(selected_item[0])['values']
-        id = item_values[0]
         
-        # Buscar y eliminar el producto
+        id = selected_item[0]
         
+        # Buscar y eliminar el cliente
         self.clientes = [p for p in self.clientes if p.id != id]
         self.babilon.setClientes(self.clientes)
+        
+        self.ids_disponibles.append(id)
+        
+        
         messagebox.showinfo("Éxito", f"Cliente con ID '{id}' eliminado correctamente.")
         self.actualizar_lista()
         
     def crear_cliente(self):
+        nuevo_id = self.obtener_id_libre()
         # Abrir la ventana CrearClienteWindow pasando el master y el objeto babilon
-        CrearClienteWindow(self, babilon=self.babilon)
+        nueva_ventana = CrearClienteWindow(self, babilon=self.babilon, id=nuevo_id)
+        self.wait_window(nueva_ventana)
         self.actualizar_lista()
+    
+    def obtener_id_libre(self):
+        if self.ids_disponibles:
+            return self.ids_disponibles.pop(0)  # Devuelve el primer ID disponible
+        else:
+            return str(len(self.clientes) + 1).zfill(3)  # Genera un nuevo ID
