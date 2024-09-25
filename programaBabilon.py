@@ -14,6 +14,7 @@ from ventanas.registrar_venta import *
 from ventanas.actualizar_precios import *
 from ventanas.gestion_cliente import *
 from ventanas.respaldo_Actualizar_precios import *
+from ventanas.generar_balaces import *
 
 user="admin"
 password="admin"
@@ -83,6 +84,8 @@ def hora():
 def abrir_ventana_actualizar_precios():
     actualizarPreciosWindow(root, babilon)
 
+def abrir_ventana_generar_balances():
+    generarBalancesWindows(root, babilon)
 
 babilon=deserializar()
 clientes=babilon.getClientes()
@@ -117,12 +120,14 @@ if __name__ == "__main__":
     boton_func1=tk.Button(frame1,text="Gestionar Clientes",command=abrir_ventana_clientes)
     boton_func2=tk.Button(frame1,text="Gestionar Inventario",command=abrir_ventana_producto)
     boton_func3=tk.Button(frame1,text="Registrar Venta",command=abrir_ventana_registrar_venta)
+    boton_func4=tk.Button(frame1,text="Generar Balance",command=abrir_ventana_generar_balances)
     boton_salir=tk.Button(frame1,text="Salir",command=salir)
 
     etiqueta.grid(row=0,column=0,padx=0,pady=10,sticky="nsew")
     boton_func1.grid(row=1,column=0,padx=0,pady=10,sticky="nsew")
     boton_func2.grid(row=2,column=0,padx=0,pady=10,sticky="nsew")
     boton_func3.grid(row=5,column=0,padx=0,pady=10,sticky="nsew")
+    boton_func4.grid(row=6,column=0,padx=0,pady=10,sticky="nsew")
     boton_salir.grid(row=7,column=0,padx=0,pady=10,sticky="nsew")
 
     # Ventana de Login
