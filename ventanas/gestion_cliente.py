@@ -7,7 +7,7 @@ from src.producto import Producto
 from src.tipo import Tipo
 from excepciones.excepciones import *
 from ventanas.crear_cliente import CrearClienteWindow
-
+from ventanas.historial_cliente import *
 
 # Clase para la ventana Toplevel
 class ClienteWindow(tk.Frame):
@@ -17,6 +17,7 @@ class ClienteWindow(tk.Frame):
         self.clientes=babilon.getClientes()
         self.babilon = babilon
         self.ids_disponibles = []
+        self.pedidos = []
         
         # Establecer un tamaño mínimo para el frame
         self.update_idletasks()  # Actualiza los tamaños requeridos antes de usar geometry
@@ -50,6 +51,8 @@ class ClienteWindow(tk.Frame):
         boton_crear.pack(side=tk.LEFT, padx=5, pady=5)
         boton_eliminar = tk.Button(contenedor, text="Eliminar Cliente", command=self.eliminar_cliente)
         boton_eliminar.pack(side=tk.LEFT, padx=5, pady=5)
+        boton_historial = tk.Button(contenedor, text="Historial de Cliente", command=self.mostrar_historial)
+        boton_historial.pack(side=tk.LEFT, padx=5, pady=5)
 
         contenedor.pack(anchor="center")
         
@@ -144,3 +147,15 @@ class ClienteWindow(tk.Frame):
                 return id_str  # Si no está en uso, devolverla
             nuevo_id += 1  # Continuar con la siguiente ID
 
+    def mostrar_historial(self):
+    # Obtener el cliente seleccionado
+        selected_item = self.tree.selection()
+        if selected_item:
+            cliente_id = self.tree.item(selected_item, "values")[0]
+            cliente = next((c for c in self.clientes if c.id == cliente_id), None)  # Obtener el cliente correspondiente
+            if cliente and cliente.pedidos:  # Asegúrate de que el cliente tenga pedidos
+                HistorialCliente(self, cliente_id, cliente.pedidos)  # Ahora pasas los pedidos correctamente
+            else:
+                messagebox.showinfo("Sin Pedidos", f"No hay pedidos para el cliente {cliente_id}")
+        else:
+            messagebox.showwarning("Selección", "Por favor selecciona un cliente")
