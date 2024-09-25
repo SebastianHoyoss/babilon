@@ -17,7 +17,7 @@ from ventanas.respaldo_Actualizar_precios import *
 from ventanas.generar_balaces import *
 from PIL import Image, ImageTk
 
-user="admin"
+user="Administrador"
 password="admin"
 passwordE="empleado"
 def salir():
@@ -35,7 +35,7 @@ def validar_login():
         root.deiconify()
         mostrar_funcionalidades_admin()
 
-    elif usuario == "empleado" and contra == passwordE:  # Si es employe
+    elif usuario == "Empleado" and contra == passwordE:  # Si es employe
         messagebox.showinfo("Bienvenido", f"Se ha iniciado sesión como empleado")
         ventana_login.destroy()
         root.deiconify()
@@ -165,12 +165,12 @@ if __name__ == "__main__":
     frame_login.pack(pady=20)
 
     tk.Label(frame_login, text="Usuario:").grid(row=0, column=0, padx=10, pady=10)
-    entry_usuario = tk.Entry(frame_login)
-    entry_usuario.grid(row=0, column=1, padx=10, pady=10)
+    entry_usuario = ttk.Combobox(frame_login, values=["Administrador", "Empleado"],)
+    entry_usuario.grid(row=0, column=1, padx=10, pady=10, sticky="nsew")
 
     tk.Label(frame_login, text="Contraseña:").grid(row=1, column=0, padx=10, pady=10)
     entry_contraseña = tk.Entry(frame_login, show="*")
-    entry_contraseña.grid(row=1, column=1, padx=10, pady=10)
+    entry_contraseña.grid(row=1, column=1, padx=10, pady=10, sticky="nsew")
 
     # Botón de login
     boton_login = tk.Button(frame_login, text="Iniciar sesión", command=validar_login)
