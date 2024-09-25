@@ -68,7 +68,13 @@ def abrir_ventana_producto():
 
 
 def abrir_ventana_registrar_venta():
-    RegistrarVentaWindow(root, babilon)
+    # Limpiar el frame2
+    for widget in frame2.winfo_children():
+        widget.destroy()
+    
+    # Crear y agregar la ventana RegistrarVentaWindow al frame2
+    venta_window = RegistrarVentaWindow(frame2, babilon)
+    venta_window.pack(fill='both', expand=True)
 def hora():
     etiqueta.config(text=time.strftime("%H:%M:%S"))
     serializar(babilon)

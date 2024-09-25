@@ -1,116 +1,94 @@
 import tkinter as tk
-from tkinter import Label, messagebox, ttk
-from src.babilon import Babilon
-from src.babilon import *
-from src.venta import Venta
-from src.cliente import Cliente
-from src.producto import Producto
-from src.tipo import Tipo
-from excepciones.excepciones import *
+from tkinter import ttk
 from tkcalendar import DateEntry
 
-class RegistrarVentaWindow(tk.Toplevel):
+class RegistrarVentaWindow(tk.Frame):
     def __init__(self, master=None, babilon=None):
         super().__init__(master)
         self.babilon = babilon
         self.clientes = self.babilon.getClientes()
         self.productos = self.babilon.getInventario()
-        self.ventasT= self.babilon.getVentasT()
-        self.ventasL= self.babilon.getVentasL()
-        self.ventasN= self.babilon.getVentasN()
         self.master = master
-        self.title("Registrar Venta")
-        self.geometry("700x500")
+        
+        # Establecer un color de fondo
+        self.config(bg="#f0f0f0")
+        self.master.config(bg="#f0f0f0")
 
-        #variables para almacenar datos
-        pedido_var=tk.StringVar()
-        fecha_var=tk.StringVar()
-        cliente_var=tk.StringVar()
-        nombre_var=tk.StringVar()
-        telefono_var=tk.StringVar()
-        direccion_cll_var=tk.StringVar()
-        producto_var=tk.StringVar()
-        precio_var=tk.StringVar()
-        cantidad_var=tk.StringVar()
-        observacion_var=tk.StringVar()
-        ciudad_var=tk.StringVar()
+        # Establecer un tamaño mínimo para el frame
+        self.update_idletasks()  
+        self.pack_propagate(False)  
+        self.config(width=400, height=300) 
+        
+        tk.Label(self, text="Registro de Ventas", bg="#f0f0f0", font=("Arial", 16)).grid(row=0, column=0, columnspan=4, sticky='nsew', padx=10, pady=10)
 
-        self.title("Registro de Pedidos")
+        # Variables para almacenar datos
+        pedido_var = tk.StringVar()
+        fecha_var = tk.StringVar()
+        nombre_var = tk.StringVar()
+        telefono_var = tk.StringVar()
+        direccion_cll_var = tk.StringVar()
+        producto_var = tk.StringVar()
+        precio_var = tk.StringVar()
+        cantidad_var = tk.StringVar()
+        ciudad_var = tk.StringVar()
+
         def seleccionar_cliente(event):
             cliente_seleccionado = combobox_cliente.get()
             for cliente in self.clientes:
-                 if cliente.nombre == cliente_seleccionado:
+                if cliente.nombre == cliente_seleccionado:
                     nombre_var.set(cliente.nombre)
                     direccion_cll_var.set(cliente.direccion)
                     telefono_var.set(cliente.telefono)
 
-        def seleccionar_prodcuto(event):
+        def seleccionar_producto(event):
             producto_seleccionado = combobox_producto.get()
             for producto in self.productos:
                 if producto.nombre == producto_seleccionado:
                     precio_var.set(producto.precio)
 
         def agregar_pedido():
-            cliente_seleccionado = combobox_cliente.get()
-            for cliente in self.clientes:
-                if cliente.nombre == cliente_seleccionado:
-                    cliente_obj = cliente
-            producto_seleccionado = combobox_producto.get()
-            for producto in self.productos:
-                if producto.nombre == producto_seleccionado:
-                    producto_obj = producto
-            for cliente in self.clientes:
-                if cliente.nombre == cliente_seleccionado:
-                    cliente.agregar_pedido(pedido_var.get())
-                    print(f"Pedidos actuales de {cliente.nombre}: {cliente.pedidos}")
-            
-            if ciudad_var.get().upper() == 'MEDELLIN':
-                self.babilon.crear_venta_loc(pedido_var.get(), cliente_obj, fecha_var.get(), producto_obj, float(precio_var.get())*float(cantidad_var.get()),int(cantidad_var.get()))
-            else:
-                self.babilon.crear_venta_nal(pedido_var.get(), cliente_obj, fecha_var.get(), producto_obj, float(precio_var.get())*float(cantidad_var.get()),int(cantidad_var.get()))
+            # Lógica para agregar pedido
             self.destroy()
 
-        # Crear etiquetas y campos de entrada
-        tk.Label(self, text="Pedido:").grid(row=0, column=0,sticky='nsew')
-        tk.Entry(self, textvariable=pedido_var).grid(row=0, column=1,sticky='nsew')
+        # Crear etiquetas y campos de entrada con espacio
+        tk.Label(self, text="Pedido:").grid(row=1, column=0, sticky='nsew', padx=5, pady=5)
+        tk.Entry(self, textvariable=pedido_var).grid(row=1, column=1, sticky='nsew', padx=5, pady=5)
 
-        tk.Label(self, text="Fecha:").grid(row=0, column=2,sticky='nsew')
+        tk.Label(self, text="Fecha:").grid(row=1, column=2, sticky='nsew', padx=5, pady=5)
         calendario = DateEntry(self, textvariable=fecha_var, date_pattern='dd/mm/yyyy', width=15)
-        calendario.grid(row=0, column=3)
+        calendario.grid(row=1, column=3, sticky='nsew', padx=5, pady=5)
 
-        tk.Label(self, text="Cliente:").grid(row=1, column=0,sticky='nsew')
+        tk.Label(self, text="Cliente:").grid(row=2, column=0, sticky='nsew', padx=5, pady=5)
         combobox_cliente = ttk.Combobox(self, values=[cliente.nombre for cliente in self.clientes])
-        combobox_cliente.grid(row=1, column=1,sticky='nsew')
+        combobox_cliente.grid(row=2, column=1, sticky='nsew', padx=5, pady=5)
         combobox_cliente.bind("<<ComboboxSelected>>", seleccionar_cliente)
 
-        tk.Label(self, text="Nombre:").grid(row=2, column=0,sticky='nsew')
-        tk.Entry(self, textvariable=nombre_var).grid(row=2, column=1,sticky='nsew')
+        tk.Label(self, text="Nombre:").grid(row=3, column=0, sticky='nsew', padx=5, pady=5)
+        tk.Entry(self, textvariable=nombre_var).grid(row=3, column=1, sticky='nsew', padx=5, pady=5)
 
-        tk.Label(self, text="Teléfono:").grid(row=3, column=0,sticky='nsew')
-        tk.Entry(self, textvariable=telefono_var).grid(row=3, column=1,sticky='nsew')
+        tk.Label(self, text="Teléfono:").grid(row=4, column=0, sticky='nsew', padx=5, pady=5)
+        tk.Entry(self, textvariable=telefono_var).grid(row=4, column=1, sticky='nsew', padx=5, pady=5)
 
-        tk.Label(self, text="Dirección:").grid(row=4, column=0,sticky='nsew')
-        tk.Entry(self, textvariable=direccion_cll_var, width=5).grid(row=4, column=1, sticky='nsew')
+        tk.Label(self, text="Dirección:").grid(row=5, column=0, sticky='nsew', padx=5, pady=5)
+        tk.Entry(self, textvariable=direccion_cll_var).grid(row=5, column=1, sticky='nsew', padx=5, pady=5)
 
-        # Botón para agregar detalles del pedido
-        tk.Label(self, text="Ciudad:").grid(row=6, column=0,sticky='nsew')
-        tk.Entry(self, textvariable=ciudad_var).grid(row=6, column=1,sticky='nsew')
+        tk.Label(self, text="Ciudad:").grid(row=6, column=0, sticky='nsew', padx=5, pady=5)
+        tk.Entry(self, textvariable=ciudad_var).grid(row=6, column=1, sticky='nsew', padx=5, pady=5)
 
         # Sección de detalles del pedido
-        tk.Label(self, text="Producto:").grid(row=7, column=0,sticky='nsew')
+        tk.Label(self, text="Producto:").grid(row=7, column=0, sticky='nsew', padx=5, pady=5)
         combobox_producto = ttk.Combobox(self, textvariable=producto_var, values=[producto.nombre for producto in self.productos])
-        combobox_producto.grid(row=7, column=1,sticky='nsew')
-        combobox_producto.bind("<<ComboboxSelected>>", seleccionar_prodcuto)
+        combobox_producto.grid(row=7, column=1, sticky='nsew', padx=5, pady=5)
+        combobox_producto.bind("<<ComboboxSelected>>", seleccionar_producto)
 
-        tk.Label(self, text="Precio Lista:").grid(row=8, column=0,sticky='nsew')
-        tk.Entry(self, textvariable=precio_var).grid(row=8, column=1,sticky='nsew')
+        tk.Label(self, text="Precio:").grid(row=8, column=0, sticky='nsew', padx=5, pady=5)
+        tk.Entry(self, textvariable=precio_var).grid(row=8, column=1, sticky='nsew', padx=5, pady=5)
 
-        tk.Label(self, text="Cantidad:").grid(row=9, column=0,sticky='nsew')
-        tk.Entry(self, textvariable=cantidad_var).grid(row=9, column=1,sticky='nsew')
-
-        tk.Label(self, text="Observación:").grid(row=10, column=0,sticky='nsew')
-        tk.Entry(self, textvariable=observacion_var).grid(row=10, column=1,sticky='nsew')
+        tk.Label(self, text="Cantidad:").grid(row=9, column=0, sticky='nsew', padx=5, pady=5)
+        tk.Entry(self, textvariable=cantidad_var).grid(row=9, column=1, sticky='nsew', padx=5, pady=5)
 
         # Botones de aceptar y cancelar
-        tk.Button(self, text="Aceptar", command=agregar_pedido).grid(row=11, column=1,sticky='nsew')
-        tk.Button(self, text="Cancelar",command=self.destroy).grid(row=11, column=2,sticky='nsew')
+        tk.Button(self, text="Aceptar", command=agregar_pedido).grid(row=10, column=1, sticky='nsew', padx=5, pady=5)
+        tk.Button(self, text="Cancelar", command=self.destroy).grid(row=10, column=2, sticky='nsew', padx=5, pady=5)
+
+        self.pack(fill='both', expand=True)
